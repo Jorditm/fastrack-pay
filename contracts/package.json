@@ -2,6 +2,7 @@
   "name": "hardhat-project",
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox-viem": "^3.0.0",
-    "hardhat": "^2.22.6"
+    "hardhat": "^2.22.6",
+    "hardhat-gas-reporter": "^2.2.0"
   }
 }
