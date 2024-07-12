@@ -100,9 +100,11 @@ contract CompanyWallet is Ownable {
         emit PaymentReceived(_customer, productsInfo[_productId].price);
     }
 
-    function addSubscription(address _customer, bytes32 _productId) external {
+    function addSubscription(address _customer, bytes32 _productId) payable external {
         require(productsInfo[_productId].available, "Product is not available");
         require(productsInfo[_productId].recurring, "Product is not recurring");
+        require(msg.value == productsInfo[_productId].price, "Invalid payment amount");
+        require(customerSubscriptionsStatus[_customer][_productId].isActive == false, "Subscription is already active");
         customerSubscriptions[_customer].push(_productId);
         CustomerSubscriptionInfo memory subscription = CustomerSubscriptionInfo({
             customer: _customer,
@@ -120,7 +122,7 @@ contract CompanyWallet is Ownable {
         emit CustomerUnsubscribed(_customer, _productId);
     }
 
-    function reactivateSubscription(address _customer, bytes32 _productId) external onlyOwner {
+    function reactivateSubscription(address _customer, bytes32 _productId) external payable {
         require(productsInfo[_productId].available, "Product is not available");
         require(productsInfo[_productId].recurring, "Product is not recurring");
         require(!customerSubscriptionsStatus[_customer][_productId].isActive, "Subscription is already active");

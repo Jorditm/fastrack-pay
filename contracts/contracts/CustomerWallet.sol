@@ -7,12 +7,24 @@ interface ICompanyWallet {
     function getProductPrice(
         bytes32 _productId
     ) external view returns (uint256);
+    function addSubscription(
+        address _customer,
+        bytes32 _productId
+    ) external payable;
+    function cancelSubscription(address _customer, bytes32 _productId) external;
+    function reactivateSubscription(
+        address _customer,
+        bytes32 _productId
+    ) external payable;
 }
 
 contract CustomerWallet is Ownable {
     event Deposit(uint256 amount);
     event Withdrawal(uint256 amount);
     event OneTimePayment(address indexed company, uint256 amount);
+    event SubscriptionAdded(address indexed company, bytes32 productId);
+    event SubscriptionCancelled(address indexed company, bytes32 productId);
+    event SubscriptionReactivated(address indexed company, bytes32 productId);
 
     constructor(address _owner) Ownable(_owner) {}
 
@@ -47,6 +59,67 @@ contract CustomerWallet is Ownable {
             emit OneTimePayment(_companyContract, price);
         } catch {
             revert("Failed to make one time payment");
+        }
+    }
+
+    function addSubscription(
+        address _companyContract,
+        bytes32 _productId
+    ) public onlyOwner {
+        uint256 price = ICompanyWallet(_companyContract).getProductPrice(
+            _productId
+        );
+
+        require(price > 0, "Failed to retrieve price");
+        require(address(this).balance >= price, "Insufficient balance");
+
+        try
+            ICompanyWallet(_companyContract).addSubscription{value: price}(
+                address(this),
+                _productId
+            )
+        {
+            emit SubscriptionAdded(_companyContract, _productId);
+        } catch {
+            revert("Failed to add subscription");
+        }
+    }
+
+    function cancelSubscription(
+        address _companyContract,
+        bytes32 _productId
+    ) public onlyOwner {
+        try
+            ICompanyWallet(_companyContract).cancelSubscription(
+                address(this),
+                _productId
+            )
+        {
+            emit SubscriptionCancelled(_companyContract, _productId);
+        } catch {
+            revert("Failed to cancel subscription");
+        }
+    }
+
+    function reactivateSubscription(
+        address _companyContract,
+        bytes32 _productId
+    ) public onlyOwner {
+        uint256 price = ICompanyWallet(_companyContract).getProductPrice(
+            _productId
+        );
+
+        require(price > 0, "Failed to retrieve price");
+        require(address(this).balance >= price, "Insufficient balance");
+
+        try
+            ICompanyWallet(_companyContract).reactivateSubscription{
+                value: price
+            }(address(this), _productId)
+        {
+            emit SubscriptionReactivated(_companyContract, _productId);
+        } catch {
+            revert("Failed to reactivate subscription");
         }
     }
 }
