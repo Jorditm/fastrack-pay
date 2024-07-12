@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import CompanyForm from './CompanyForm'
 
 export default function Setup() {
   const [type, setType] = useState<'company' | 'person'>('company')
@@ -45,7 +46,7 @@ export default function Setup() {
             <Label htmlFor='option-two'>I&apos;m a person</Label>
           </div>
         </RadioGroup>
-        {type === 'company' ? <div>Company form</div> : <div>Person form</div>}
+        {type === 'company' ? <CompanyForm/> : <div>Person form</div>}
       </div>
     </div>
   )
