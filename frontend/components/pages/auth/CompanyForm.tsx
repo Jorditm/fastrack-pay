@@ -8,7 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useState } from 'react'
 import useSession from '@/hooks/useSession'
 import { useConfig, useWriteContract } from 'wagmi'
-import { abi } from '@/lib/wagmi/abi'
+import { abi } from '@/lib/web3auth/abi'
 import { CONTRACT_ADDRESS } from '@/lib/constants'
 import {
   Form,
@@ -31,17 +31,15 @@ const FormSchema = z.object({
   password: z.string().min(6, 'Password must be at least 6 characters long'),
 })
 
-export default function CompanyForm() {
+export default function CompanyForm({confirmTokens}: {confirmTokens: boolean}) {
   const { user, wallet } = useSession()
   const { setProvider, setLoggedIn } = useWeb3AuthCustomProvider()
-  const [showPassword, setShowPassword] = useState(false)
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       companyName: '',
       email: '',
-      password: '',
     },
   })
 
@@ -75,7 +73,7 @@ export default function CompanyForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className='mx-auto w-[350px] space-y-4'
+        className='w-full space-y-4'
         noValidate
       >
         <FormField
@@ -104,43 +102,10 @@ export default function CompanyForm() {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name='password'
-          render={({ field }) => (
-            <FormItem>
-              <div className='flex items-center justify-between'>
-                <FormLabel>Password</FormLabel>
-                <button
-                  onClick={(e) => {
-                    e.preventDefault() // Prevent form submission
-                    setShowPassword(!showPassword)
-                  }}
-                  className='outline-none focus:outline-none'
-                >
-                  {showPassword ? (
-                    <EyeOffIcon className='h-5 w-5 text-gray-500' />
-                  ) : (
-                    <EyeIcon className='h-5 w-5 text-gray-500' />
-                  )}
-                </button>
-              </div>
-              <FormControl>
-                <Input
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder='password'
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
         <Button
           type='submit'
           className='w-full'
-          disabled={form.formState.isSubmitting}
+          disabled={form.formState.isSubmitting || !confirmTokens}
         >
           {form.formState.isSubmitting ? 'Loading...' : 'Submit'}
         </Button>
