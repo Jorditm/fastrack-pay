@@ -166,7 +166,10 @@ contract CompanyWallet is Ownable {
                 uint256 nextPayment = getCustomerSubscriptionNextPayment(customer, productId);
                 bool isActive = getCustomerSubscriptionStatus(customer, productId);
                 if (nextPayment <= block.timestamp && isActive) {
-                    ICustomerWallet(customer).payForSubscription(productId);
+                    bool success = ICustomerWallet(customer).payForSubscription(productId);
+                    if (success) {
+                        emit CustomerCharged(customer, productId);
+                    }
                 }
             }
         }
