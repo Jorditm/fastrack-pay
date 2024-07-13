@@ -11,6 +11,9 @@ import { useWriteContract } from 'wagmi'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { abi } from '@/lib/wagmi/abi'
 import { CONTRACT_ADDRESS } from '@/lib/constants'
+import Web3 from 'web3'
+import web3auth from '@/lib/web3auth/provider'
+import { redirect } from 'next/navigation'
 
 const FormSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -42,14 +45,20 @@ export default function PersonForm() {
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     const { name, email, password } = data
-    console.log('data', data)
     //TODO: ADD THE DATA TO THE NEW CONTRACT
-    writeContract({
-      abi,
-      address: CONTRACT_ADDRESS,
-      functionName: 'deployCustomerAccount',
-      args: [wallet],
-    })
+    const web3 = new Web3(web3auth.provider as any)
+    const contract = new web3.eth.Contract(
+      JSON.parse(JSON.stringify(abi)),
+      CONTRACT_ADDRESS
+    )
+    const result = await contract.methods
+      .deployCustomerAccount(['patata', 'banana'])
+      .send({ from: wallet as string })
+      if(result){
+        const companyAccountContract =  "0x" + result?.events?.CompanyAccountCreated.data.slice(-40)
+        localStorage.setItem('companyAccount', companyAccountContract.toString())
+        redirect('/company/products')
+      }
   }
   return (
     <Form {...form}>

@@ -56,7 +56,6 @@ export default function CompanyForm() {
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     const { companyName, email, password } = data
-    console.log('data', data)
     //TODO: ADD THE DATA TO THE NEW CONTRACT
     const web3 = new Web3(web3auth.provider as any)
     const contract = new web3.eth.Contract(
