@@ -10,29 +10,31 @@ import { abi } from '@/lib/web3auth/abi'
 import useSession from '@/hooks/useSession'
 import { CONTRACT_ADDRESS } from '@/lib/constants'
 import { Checkbox } from '@/components/ui/checkbox'
+import {ethers, Eip1193Provider} from "ethers"
+import web3auth from '@/lib/web3auth/provider'
 
 export default function Setup() {
   const [type, setType] = useState<'company' | 'person'>('company')
   const [confirmAddress, setConfirmAddress] = useState(false)
   const { wallet } = useSession()
 
-  const { data, isFetching } = useReadContract({
-    abi,
-    address: CONTRACT_ADDRESS,
-    functionName: 'accounts',
-    args: [wallet],
-  })
+  const getSigner = async () => {
+    const ethersProvider = new ethers.BrowserProvider(web3auth.provider as Eip1193Provider)
+    const signer = await ethersProvider.getSigner()
+    return signer
+  }
+  const signer = await getSigner()
 
-  useEffect(() => {
-    if (data !== 0) {
-      if (data === 1) {
-        redirect('/personal')
-      }
-      if (data === 2) {
-        redirect('/company')
-      }
-    }
-  }, [data])
+  // useEffect(() => {
+  //   if (data !== 0) {
+  //     if (data === 1) {
+  //       redirect('/personal')
+  //     }
+  //     if (data === 2) {
+  //       redirect('/company')
+  //     }
+  //   }
+  // }, [data])
 
   return (
     <>
