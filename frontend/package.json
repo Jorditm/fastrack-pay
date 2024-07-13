@@ -12,6 +12,7 @@
     "commit": "npm run format && npm run lint"
   },
   "dependencies": {
+    "@gelatonetwork/relay-sdk": "^5.5.6",
     "@hookform/resolvers": "^3.9.0",
     "@radix-ui/react-checkbox": "^1.1.1",
     "@radix-ui/react-dialog": "^1.1.1",
@@ -31,6 +32,7 @@
     "@web3auth/wallet-services-plugin": "^8.10.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "ethers": "^6.13.1",
     "framer-motion": "^11.3.2",
     "lucide-react": "^0.408.0",
     "next": "14.2.5",
