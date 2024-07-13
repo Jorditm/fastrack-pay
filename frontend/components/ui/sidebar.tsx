@@ -76,11 +76,11 @@ export function Sidebar({ routes, clientType }: SidebarProps) {
                     }}
                     transition={{ delay: 0.25 }}
                     className={cn(
-                        'text-3xl font-bold w-6 mx-auto pl-0.5 mb-4',
+                        'text-3xl font-bold w-8 mx-auto pl-0.5 mb-4',
                         !sidebarIsClosed && 'hidden'
                     )}
                 >
-                    <Image src="/favicon.ico" alt="Logo" width={40} height={40} />
+                    <Image src="/favicon.ico" alt="Logo" width={75} height={75} />
                 </motion.div>
                 {/* <Separator /> */}
                 <div className="w-full flex flex-col gap-2 items-center justify-start my-4">

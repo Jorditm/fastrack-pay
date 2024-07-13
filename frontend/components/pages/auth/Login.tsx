@@ -11,6 +11,7 @@ import Web3 from "web3";
 import { clientId, privateKeyProvider } from "@/lib/web3auth/web3AuthProviderProps";
 import web3auth from "@/lib/web3auth/provider";
 import useWeb3AuthCustomProvider from "@/hooks/useWeb3Auth";
+import { Eip1193Provider, ethers } from "ethers"
 
 
 export default function Login() {
@@ -52,9 +53,7 @@ export default function Login() {
                 setUser(user)
             }
             const connectedWallets = await getAccounts()
-            if (connectedWallets && connectedWallets.length > 0) {
-                setWallets(connectedWallets as any)
-            }
+            if (connectedWallets) setWallets(connectedWallets as any)
         }
     };
 
@@ -74,11 +73,13 @@ export default function Login() {
             console.error("provider not initialized yet");
             return
         }
-        const web3 = new Web3(provider as any);
+        const ethersProvider = new ethers.BrowserProvider(web3auth.provider as Eip1193Provider)
+    
+        const signer = ethersProvider.getSigner()
+        const address = (await signer).getAddress();
 
         // Get user's Ethereum public address
-        const address = await web3.eth.getAccounts();
-        return address
+        return address ?? null
     };
 
 
