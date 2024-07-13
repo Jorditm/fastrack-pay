@@ -12,6 +12,13 @@ import {
     SheetTrigger,
 } from "@/components/ui/sheet"
 import { zodResolver } from "@hookform/resolvers/zod";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
 
 import { ColumnDef } from "@tanstack/react-table"
 import { useForm } from "react-hook-form";
@@ -27,12 +34,13 @@ const formSchema = z.object({
     type: z.string().min(2, {
         message: "Type must be at least 2 characters.",
     }),
+    status: z.enum(["active", "inactive", "paused"]),
 })
 
 export type Payment = {
     id: string
     amount: number
-    status: "pending" | "processing" | "success" | "failed"
+    status: "active" | "inactive" | "paused"
     name: string
     type: string
 }
@@ -65,7 +73,7 @@ async function getData(): Promise<Payment[]> {
             amount: 100,
             name: "test",
             type: "oneTime",
-            status: "pending"
+            status: "active"
         },
         // ...
     ]
@@ -80,6 +88,7 @@ export default function Page() {
             name: "",
             price: 0,
             type: "",
+            status: "active"
         },
     })
 
@@ -103,61 +112,87 @@ export default function Page() {
                             </SheetDescription>
                         </SheetHeader>
                         <Form {...form}>
-                            <form className="flex flex-col gap-2" onSubmit={form.handleSubmit(onSubmit)}>
-                                <FormField
-                                    control={form.control}
-                                    name="name"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel htmlFor="name">Name</FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    id="name"
-                                                    value={field.value}
-                                                    onChange={(e) => field.onChange(e.target.value)}
-                                                    className="col-span-2 h-8"
-                                                />
-                                            </FormControl>
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormField
-                                    control={form.control}
-                                    name="price"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel htmlFor="price">Price</FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    id="price"
-                                                    type="number"
-                                                    value={field.value}
-                                                    onChange={(e) => field.onChange(e.target.valueAsNumber)}
-                                                    className="col-span-2 h-8"
-                                                />
-                                            </FormControl>
-                                        </FormItem>
-                                    )}
-                                />
+                            <form className="flex flex-col gap-6" onSubmit={form.handleSubmit(onSubmit)}>
+                                <div className="flex flex-col gap-2">
+                                    <FormField
+                                        control={form.control}
+                                        name="name"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel htmlFor="name">Name</FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        id="name"
+                                                        value={field.value}
+                                                        onChange={(e) => field.onChange(e.target.value)}
+                                                        className="col-span-2 h-10"
+                                                    />
+                                                </FormControl>
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={form.control}
+                                        name="price"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel htmlFor="price">Price</FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        id="price"
+                                                        type="number"
+                                                        value={field.value}
+                                                        onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                                                        className="col-span-2 h-10"
+                                                    />
+                                                </FormControl>
+                                            </FormItem>
+                                        )}
+                                    />
 
-                                <FormField
-                                    control={form.control}
-                                    name="type"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel htmlFor="type">Type</FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    id="type"
-                                                    value={field.value}
-                                                    onChange={(e) => field.onChange(e.target.value)}
-                                                    className="col-span-2 h-8"
-                                                />
-                                            </FormControl>
-                                        </FormItem>
-                                    )}
-                                />
-                                <Button type="submit">Add Product</Button>
+                                    <FormField
+                                        control={form.control}
+                                        name="type"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel htmlFor="type">Type</FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        id="type"
+                                                        value={field.value}
+                                                        onChange={(e) => field.onChange(e.target.value)}
+                                                        className="col-span-2 h-10"
+                                                    />
+                                                </FormControl>
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={form.control}
+                                        name="status"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel htmlFor="status">Status</FormLabel>
+                                                <FormControl>
+                                                    <Select value={field.value} onValueChange={(value) => field.onChange(value)}>
+                                                        <SelectTrigger className="w-full">
+                                                            <SelectValue placeholder="status" />
+                                                        </SelectTrigger>
+                                                        <SelectContent>
+                                                            <SelectItem value="active">Active</SelectItem>
+                                                            <SelectItem value="inactive">Inactive</SelectItem>
+                                                            <SelectItem value="paused">Paused</SelectItem>
+                                                        </SelectContent>
+                                                    </Select>
+                                                </FormControl>
+                                            </FormItem>
+                                        )}
+                                    />
+
+                                </div>
+                                <div className="w-full">
+                                    <Button className="w-full" type="submit">Add Product</Button>
+                                </div>
                             </form>
                         </Form>
                     </SheetContent>
