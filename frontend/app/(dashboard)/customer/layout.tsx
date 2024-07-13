@@ -7,9 +7,9 @@ import { redirect } from 'next/navigation'
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
     useEffect(() => {
         const user = localStorage.getItem('user')
-        const companyAddress = localStorage.getItem('companyAddress')
+        const userAddress = localStorage.getItem('userAddress')
         if(user){
-            if(!companyAddress){
+            if(!userAddress){
                 redirect('/company/customers')
             }
         }else{
