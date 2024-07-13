@@ -95,7 +95,7 @@ export function Sidebar({ routes, clientType }: SidebarProps) {
                                     }}
                                     key={section.name}
                                     className={cn(
-                                        'w-full items-center justify-start group gap-1.5 text-sm  min-h-[2rem]',
+                                        'w-full items-center justify-start group gap-1.5 text-sm  min-h-[2rem] capitalize',
                                         section.visible
                                             ? 'inline-flex'
                                             : 'hidden',
