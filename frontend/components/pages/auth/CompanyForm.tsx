@@ -30,9 +30,7 @@ import {
 } from '@gelatonetwork/relay-sdk'
 import { Provider } from '@radix-ui/react-toast'
 import { toast } from '@/components/ui/use-toast'
-import { useWaitForTransactionReceipt } from 'wagmi'
-
-
+import { useTransaction, useWaitForTransactionReceipt } from 'wagmi'
 
 const FormSchema = z.object({
   companyName: z.string().min(1, 'Company name is required'),
@@ -49,14 +47,18 @@ export default function CompanyForm() {
     },
   })
   const [loading, setLoading] = useState(false)
-  const responseHash = '0xa8ca957df5097b27a0508b8c86951175f47a8e08e75dc2bdfb6909271ff97570'
-  const [transactionHash, setTransactionHash] = useState<`0x${string}` | null>(responseHash)
+  const responseHash =
+    '0xa8ca957df5097b27a0508b8c86951175f47a8e08e75dc2bdfb6909271ff97570'
+  const [transactionHash, setTransactionHash] = useState<`0x${string}` | null>(
+    responseHash
+  )
 
-  const {data, isFetching} = useWaitForTransactionReceipt({
-    hash: transactionHash as `0x${string}`,
+  const { data, error, isFetching, refetch } = useTransaction({
+    hash: responseHash as `0x${string}`,
   })
-  console.log("result", data)
-  console.log("is fetching", isFetching)
+  console.log('result', data)
+  console.log('error', error)
+  console.log('is fetching', isFetching)
 
   useEffect(() => {
     if (user) {
@@ -65,7 +67,11 @@ export default function CompanyForm() {
     }
   }, [user])
 
-
+  useEffect(() => {
+    if (!data) {
+      refetch()
+    }
+  }, [data])
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     setLoading(true)
@@ -110,13 +116,13 @@ export default function CompanyForm() {
           setTransactionHash(status?.transactionHash)
         }
       }
-      if(status?.taskState === "Cancelled"){
+      if (status?.taskState === 'Cancelled') {
         clearInterval(statusInterval)
         setLoading(false)
         toast({
-          title: "Error",
-          description: "Transaction cancelled",
-          variant: "destructive",
+          title: 'Error',
+          description: 'Transaction cancelled',
+          variant: 'destructive',
         })
       }
     }
