@@ -1,0 +1,42 @@
+2024-07-13T00:04:44.291 application=db_connection [error] Postgrex.Protocol (#PID<0.212.0>) failed to connect: ** (DBConnection.ConnectionError) tcp connect (db:5432): connection refused - :econnrefused
+2024-07-13T00:04:44.291 application=db_connection [error] Postgrex.Protocol (#PID<0.217.0>) failed to connect: ** (DBConnection.ConnectionError) tcp connect (db:5432): connection refused - :econnrefused
+2024-07-13T00:04:44.291 application=db_connection [error] Postgrex.Protocol (#PID<0.211.0>) failed to connect: ** (DBConnection.ConnectionError) tcp connect (db:5432): connection refused - :econnrefused
+2024-07-13T00:04:44.291 application=db_connection [error] Postgrex.Protocol (#PID<0.216.0>) failed to connect: ** (DBConnection.ConnectionError) tcp connect (db:5432): connection refused - :econnrefused
+2024-07-13T00:04:44.290 application=db_connection [error] Postgrex.Protocol (#PID<0.223.0>) failed to connect: ** (DBConnection.ConnectionError) tcp connect (db:5432): connection refused - :econnrefused
+2024-07-13T00:04:44.338 application=db_connection [error] Postgrex.Protocol (#PID<0.228.0>) failed to connect: ** (DBConnection.ConnectionError) tcp connect (db:5432): connection refused - :econnrefused
+2024-07-13T00:04:44.342 application=db_connection [error] Postgrex.Protocol (#PID<0.232.0>) failed to connect: ** (DBConnection.ConnectionError) tcp connect (db:5432): connection refused - :econnrefused
+2024-07-13T00:04:44.344 application=db_connection [error] Postgrex.Protocol (#PID<0.236.0>) failed to connect: ** (DBConnection.ConnectionError) tcp connect (db:5432): connection refused - :econnrefused
+2024-07-13T00:04:45.491 application=db_connection [error] Postgrex.Protocol (#PID<0.212.0>) failed to connect: ** (DBConnection.ConnectionError) tcp connect (db:5432): connection refused - :econnrefused
+2024-07-13T00:04:45.862 application=db_connection [error] Postgrex.Protocol (#PID<0.211.0>) failed to connect: ** (DBConnection.ConnectionError) tcp connect (db:5432): connection refused - :econnrefused
+2024-07-13T00:04:46.116 application=db_connection [error] Postgrex.Protocol (#PID<0.216.0>) failed to connect: ** (DBConnection.ConnectionError) tcp connect (db:5432): connection refused - :econnrefused
+2024-07-13T00:04:46.704 application=db_connection [error] Postgrex.Protocol (#PID<0.217.0>) failed to connect: ** (DBConnection.ConnectionError) tcp connect (db:5432): connection refused - :econnrefused
+2024-07-13T00:04:47.264 application=ecto_sql [error] Could not create schema migrations table. This error usually happens due to the following:
+
+  * The database does not exist
+  * The "schema_migrations" table, which Ecto uses for managing
+    migrations, was defined by another library
+  * There is a deadlock while migrating (such as using concurrent
+    indexes with a migration_lock)
+
+To fix the first issue, run "mix ecto.create" for the desired MIX_ENV.
+
+To address the second, you can run "mix ecto.drop" followed by
+"mix ecto.create", both for the desired MIX_ENV. Alternatively you may
+configure Ecto to use another table and/or repository for managing
+migrations:
+
+    config :explorer, Explorer.Repo,
+      migration_source: "some_other_table_for_schema_migrations",
+      migration_repo: AnotherRepoForSchemaMigrations
+
+The full error report is shown below.
+
+2024-07-13T00:04:51.914 application=db_connection [error] Postgrex.Protocol (#PID<0.221.0>) failed to connect: ** (DBConnection.ConnectionError) tcp connect (db:5432): connection refused - :econnrefused
+2024-07-13T00:04:51.914 application=db_connection [error] Postgrex.Protocol (#PID<0.211.0>) failed to connect: ** (DBConnection.ConnectionError) tcp connect (db:5432): connection refused - :econnrefused
+2024-07-13T00:04:51.914 application=db_connection [error] Postgrex.Protocol (#PID<0.212.0>) failed to connect: ** (DBConnection.ConnectionError) tcp connect (db:5432): connection refused - :econnrefused
+2024-07-13T00:04:51.914 application=db_connection [error] Postgrex.Protocol (#PID<0.217.0>) failed to connect: ** (DBConnection.ConnectionError) tcp connect (db:5432): connection refused - :econnrefused
+2024-07-13T00:04:51.914 application=db_connection [error] Postgrex.Protocol (#PID<0.216.0>) failed to connect: ** (DBConnection.ConnectionError) tcp connect (db:5432): connection refused - :econnrefused
+2024-07-13T00:04:51.986 application=db_connection [error] Postgrex.Protocol (#PID<0.227.0>) failed to connect: ** (DBConnection.ConnectionError) tcp connect (db:5432): connection refused - :econnrefused
+2024-07-13T00:04:51.989 application=db_connection [error] Postgrex.Protocol (#PID<0.232.0>) failed to connect: ** (DBConnection.ConnectionError) tcp connect (db:5432): connection refused - :econnrefused
+2024-07-13T00:04:51.992 application=db_connection [error] Postgrex.Protocol (#PID<0.236.0>) failed to connect: ** (DBConnection.ConnectionError) tcp connect (db:5432): connection refused - :econnrefused
+2024-07-13T00:04:53.087 application=db_connection [error] Postgrex.Protocol (#PID<0.216.0>) failed to connect: ** (DBConnection.ConnectionError) tcp connect (db:5432): connection refused - :econnrefused

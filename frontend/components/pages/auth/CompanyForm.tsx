@@ -5,7 +5,10 @@ import { z } from 'zod'
 import { EyeIcon, EyeOffIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import useSession from '@/hooks/useSession'
+import { useWriteContract } from 'wagmi'
+
 
 const FormSchema = z.object({
   companyName: z.string().min(1, 'Company name is required'),
@@ -14,8 +17,11 @@ const FormSchema = z.object({
 })
 
 export default function CompanyForm() {
+  const { user, wallet } = useSession()
   const [showPassword, setShowPassword] = useState(false)
-  const [loading, setLoading] = useState(false)
+  const { status, data:hash, writeContract } = useWriteContract()
+
+
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -26,10 +32,26 @@ export default function CompanyForm() {
     },
   })
 
+  useEffect(() => {
+    if (user) {
+      form.setValue('email', user.email)
+      form.setValue('companyName', user.name)
+    }
+  }, [user])
+
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-    setLoading(true) // Set loading to true when the request starts
     const { companyName, email, password } = data
-    console.warn('data from signup company', data)
+    console.log('data from signup company', data)
+  //   writeContract({ 
+  //     abi,
+  //     address: '0x6b175474e89094c44da98b954eedeac495271d0f',
+  //     functionName: 'transferFrom',
+  //     args: [
+  //       '0xd2135CfB216b74109775236E36d4b433F1DF507B',
+  //       '0xA0Cf798816D4b9b9866b5330EEa46a18382f251e',
+  //       123n,
+  //     ],
+  //  })
   }
 
   return (
@@ -83,8 +105,8 @@ export default function CompanyForm() {
           }
         />
       </div>
-      <Button type='submit' className='w-full' disabled={loading}>
-        {loading ? 'Loading...' : 'Submit'}
+      <Button type='submit' className='w-full' disabled={form.formState.isSubmitting}>
+        {form.formState.isSubmitting ? 'Loading...' : 'Submit'}
       </Button>
     </form>
   )

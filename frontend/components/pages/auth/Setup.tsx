@@ -9,6 +9,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { useReadContract } from 'wagmi'
 import { abi } from '@/lib/wagmi/abi'
 import useSession from '@/hooks/useSession'
+import { CONTRACT_ADDRESS } from '@/lib/constants'
 
 export default function Setup() {
   const [type, setType] = useState<'company' | 'person'>('company')
@@ -16,7 +17,7 @@ export default function Setup() {
 
   const { data, isFetching } = useReadContract({
     abi,
-    address: '0x5FbDB2315678afecb367f032d93F642f64180aa3',
+    address: CONTRACT_ADDRESS,
     functionName: 'accounts',
     args: [wallet],
   })
