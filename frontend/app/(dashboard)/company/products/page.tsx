@@ -23,78 +23,141 @@ import {
 import { ColumnDef } from "@tanstack/react-table"
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { Textarea } from "@/components/ui/textarea";
+import { useEffect, useState } from "react";
+import Web3 from "web3";
+import web3auth from "@/lib/web3auth/provider";
+import { CONTRACT_ADDRESS } from "@/lib/constants";
+import { abi } from '@/lib/wagmi/companyAbi'
+import useSession from "@/hooks/useSession";
+import useWeb3AuthCustomProvider from "@/hooks/useWeb3Auth";
+
 
 const formSchema = z.object({
-    name: z.string().min(2, {
-        message: "Name must be at least 2 characters.",
+    title: z.string().min(2, {
+        message: "Title must be at least 2 characters.",
     }),
     price: z.number().min(1, {
         message: "Price must be at least 1.",
     }),
-    type: z.string().min(2, {
-        message: "Type must be at least 2 characters.",
+    description: z.string().min(2, {
+        message: "Description must be at least 2 characters.",
     }),
-    status: z.enum(["active", "inactive", "paused"]),
+    recurring: z.string().min(2, {
+        message: "Recurring must be at least 2 characters.",
+    }),
+    available: z.string().min(2, {
+        message: "Available must be at least 2 characters.",
+    }),
+    interval: z.number().min(0, {
+        message: "Interval must be at least 0.",
+    }).nullable().optional(),
 })
 
-export type Payment = {
+export type Product = {
     id: string
-    amount: number
-    status: "active" | "inactive" | "paused"
-    name: string
-    type: string
+    title: string
+    price: number
+    description: string
+    recurring: boolean
+    available: boolean
+    interval: number
 }
 
-export const columns: ColumnDef<Payment>[] = [
+export const columns: ColumnDef<Product>[] = [
     {
-        accessorKey: "status",
-        header: "Status",
+        accessorKey: "title",
+        header: "Title",
     },
     {
-        accessorKey: "name",
-        header: "Name",
+        accessorKey: "price",
+        header: "Price",
     },
     {
-        accessorKey: "amount",
-        header: "Amount",
+        accessorKey: "recurring",
+        header: "Recurring",
     },
     {
-        accessorKey: "type",
-        header: "Type",
+        accessorKey: "description",
+        header: "Description",
+    },
+    {
+        accessorKey: "available",
+        header: "Available",
+    },
+    {
+        accessorKey: "interval",
+        header: "Interval",
     },
 ]
 
 
-async function getData(): Promise<Payment[]> {
-    // Fetch data from your API here.
-    return [
-        {
-            id: "728ed52f",
-            amount: 100,
-            name: "test",
-            type: "oneTime",
-            status: "active"
-        },
-        // ...
-    ]
-}
+
 
 
 export default function Page() {
-    // const data = getData()
+    const [products, setProducts] = useState<Product[]>([])
+    const { user, wallet } = useSession()
+    const { setProvider, setLoggedIn } = useWeb3AuthCustomProvider()
+
+    const provider = new Web3(web3auth.provider as any)
+    
+    async function getAllProducts(): Promise<void> {
+            const contract = new provider.eth.Contract(JSON.parse(JSON.stringify(abi)), CONTRACT_ADDRESS);
+            const allProducts = await contract.methods.getProducts().call();
+            console.log("allProducts -->", allProducts)
+            setProducts(allProducts as Product[])
+    }
+
+    useEffect(() => {
+            getAllProducts()
+    }, [provider, setProvider])
+
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: "",
+            title: "",
             price: 0,
-            type: "",
-            status: "active"
+            description: "",
+            recurring: "false",
+            available: "false",
+            interval: 0
         },
     })
 
-    const onSubmit = (values: z.infer<typeof formSchema>) => {
+    const onSubmit = async (values: z.infer<typeof formSchema>) => {
         console.log(values)
+        const web3 = provider
+        const contract = new web3.eth.Contract(
+            JSON.parse(JSON.stringify(abi)),
+            CONTRACT_ADDRESS
+        )
+        const parsedValues = {
+            title: values.title,
+            price: Number(values.price),
+            description: values.description,
+            recurring: values.recurring === "true" ? true : false,
+            available: values.available === "true" ? true : false,
+            interval: Number(values.interval) * 86400,
+            imageUrl: "https://picsum.photos/id/40/4106/2806"
+        }
+        console.log(parsedValues)
+        const result = await contract.methods
+            .createProduct(parsedValues)
+            .send({ from: wallet as string })
+        if (result) {
+            console.log(result)
+            // const productContract = "0x" + result?.events?.ProductCreated.data.slice(-40)
+            // localStorage.setItem('product', productContract.toString())
+            // redirect('/company/products')
+        }
     }
+
+    useEffect(() => {
+        form.setValue("interval", 0)
+    }, [form.watch("recurring")])
+
 
     return (
         <>
@@ -116,13 +179,30 @@ export default function Page() {
                                 <div className="flex flex-col gap-2">
                                     <FormField
                                         control={form.control}
-                                        name="name"
+                                        name="title"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel htmlFor="name">Name</FormLabel>
+                                                <FormLabel htmlFor="title">Product title</FormLabel>
                                                 <FormControl>
                                                     <Input
-                                                        id="name"
+                                                        id="title"
+                                                        value={field.value}
+                                                        onChange={(e) => field.onChange(e.target.value)}
+                                                        className="col-span-2 h-10"
+                                                    />
+                                                </FormControl>
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={form.control}
+                                        name="description"
+                                        render={({ field }) => (
+                                            <FormItem className="">
+                                                <FormLabel htmlFor="description">Description</FormLabel>
+                                                <FormControl>
+                                                    <Textarea
+                                                        id="description"
                                                         value={field.value}
                                                         onChange={(e) => field.onChange(e.target.value)}
                                                         className="col-span-2 h-10"
@@ -149,39 +229,60 @@ export default function Page() {
                                             </FormItem>
                                         )}
                                     />
-
                                     <FormField
                                         control={form.control}
-                                        name="type"
+                                        name="recurring"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel htmlFor="type">Type</FormLabel>
+                                                <FormLabel htmlFor="recurring">Recurring payment</FormLabel>
                                                 <FormControl>
-                                                    <Input
-                                                        id="type"
-                                                        value={field.value}
-                                                        onChange={(e) => field.onChange(e.target.value)}
-                                                        className="col-span-2 h-10"
-                                                    />
+                                                    <Select value={field.value} onValueChange={(value) => field.onChange(value)}>
+                                                        <SelectTrigger className="w-full">
+                                                            <SelectValue placeholder="" />
+                                                        </SelectTrigger>
+                                                        <SelectContent>
+                                                            <SelectItem value={"true"}>Yes</SelectItem>
+                                                            <SelectItem value={"false"}>No</SelectItem>
+                                                        </SelectContent>
+                                                    </Select>
                                                 </FormControl>
                                             </FormItem>
                                         )}
                                     />
+                                    {form.watch("recurring") === "true" && (
+                                        <FormField
+                                            control={form.control}
+                                            name="interval"
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <FormLabel htmlFor="interval">Interval (in days)</FormLabel>
+                                                    <FormControl>
+                                                        <Input
+                                                            id="interval"
+                                                            type="number"
+                                                            value={field.value as number}
+                                                            onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                                                            className="col-span-2 h-10"
+                                                        />
+                                                    </FormControl>
+                                                </FormItem>
+                                            )}
+                                        />
+                                    )}
                                     <FormField
                                         control={form.control}
-                                        name="status"
+                                        name="available"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel htmlFor="status">Status</FormLabel>
+                                                <FormLabel htmlFor="available">Available</FormLabel>
                                                 <FormControl>
                                                     <Select value={field.value} onValueChange={(value) => field.onChange(value)}>
                                                         <SelectTrigger className="w-full">
                                                             <SelectValue placeholder="status" />
                                                         </SelectTrigger>
                                                         <SelectContent>
-                                                            <SelectItem value="active">Active</SelectItem>
-                                                            <SelectItem value="inactive">Inactive</SelectItem>
-                                                            <SelectItem value="paused">Paused</SelectItem>
+                                                            <SelectItem value={"true"}>Yes</SelectItem>
+                                                            <SelectItem value={"false"}>No</SelectItem>
                                                         </SelectContent>
                                                     </Select>
                                                 </FormControl>
