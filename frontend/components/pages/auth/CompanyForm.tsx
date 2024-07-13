@@ -1,5 +1,4 @@
 import { Input } from '@/components/ui/CustomInput'
-import { Label } from '@/components/ui/label'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Button } from '@/components/ui/button'
@@ -16,21 +15,16 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { waitForTransactionReceipt } from '@wagmi/core'
-import useWeb3AuthCustomProvider from '@/hooks/useWeb3Auth'
 import web3auth from '@/lib/web3auth/provider'
-import { Web3 } from 'web3'
 import { ethers, Eip1193Provider } from 'ethers'
-import { Result } from 'postcss'
 import { redirect } from 'next/navigation'
 import {
   CallWithERC2771Request,
   GelatoRelay,
   SignerOrProvider,
 } from '@gelatonetwork/relay-sdk'
-import { Provider } from '@radix-ui/react-toast'
 import { toast } from '@/components/ui/use-toast'
-import { useTransaction, useWaitForTransactionReceipt } from 'wagmi'
+import { useTransactionReceipt } from 'wagmi'
 
 const FormSchema = z.object({
   companyName: z.string().min(1, 'Company name is required'),
@@ -47,21 +41,16 @@ export default function CompanyForm() {
     },
   })
   const [loading, setLoading] = useState(false)
-  const responseHash =
-    '0xa8ca957df5097b27a0508b8c86951175f47a8e08e75dc2bdfb6909271ff97570'
   const [transactionHash, setTransactionHash] = useState<`0x${string}` | null>(
-    responseHash
+    null
   )
 
-  const { data, error, isFetching, refetch } = useTransaction({
-    hash: responseHash as `0x${string}`,
+  const { data, error, isFetching, refetch } = useTransactionReceipt({
+    hash: transactionHash as `0x${string}`
   })
-  console.log('result', data)
-  console.log('error', error)
-  console.log('is fetching', isFetching)
 
   useEffect(() => {
-    if (user) {
+    if (user) { // TODO: set to proper info requested by the contract for companies --> This is currently OK for end users
       form.setValue('email', user.email)
       form.setValue('companyName', user.name)
     }
@@ -70,6 +59,11 @@ export default function CompanyForm() {
   useEffect(() => {
     if (!data) {
       refetch()
+    }
+    if (data) {
+      const companyAddress = "0x" + data.logs[1].data.slice(-40);
+      localStorage.setItem('companyAddress', companyAddress)
+      redirect('/dashboard/products')
     }
   }, [data])
 
@@ -107,13 +101,11 @@ export default function CompanyForm() {
 
     const checkStatus = async () => {
       const status = await relay.getTaskStatus(relayResponse.taskId)
-      console.log('currentStatus', status)
 
       if (status?.taskState === 'ExecSuccess') {
         clearInterval(statusInterval)
         if (status.transactionHash) {
-          console.log('transactionHash', status?.transactionHash)
-          setTransactionHash(status?.transactionHash)
+          setTransactionHash(status?.transactionHash as `0x${string}`)
         }
       }
       if (status?.taskState === 'Cancelled') {
@@ -129,7 +121,6 @@ export default function CompanyForm() {
 
     const statusInterval = setInterval(checkStatus, 5000) // Poll every 5 seconds
   }
-  console.log('transactionHAsh out', transactionHash)
 
   return (
     <Form {...form}>
