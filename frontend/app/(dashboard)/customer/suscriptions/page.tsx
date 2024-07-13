@@ -93,13 +93,13 @@ export default function Page() {
                 <h1 className="text-2xl font-bold">Products</h1>
                 <Sheet>
                     <SheetTrigger asChild>
-                        <Button variant="default">Add Product</Button>
+                        <Button variant="default">New Subscription</Button>
                     </SheetTrigger>
                     <SheetContent className="w-[400px] sm:w-[540px]">
                         <SheetHeader>
-                            <SheetTitle>New product</SheetTitle>
+                            <SheetTitle>New subscription</SheetTitle>
                             <SheetDescription>
-                                Add a new product .
+                                Add a new subscription.
                             </SheetDescription>
                         </SheetHeader>
                         <Form {...form}>

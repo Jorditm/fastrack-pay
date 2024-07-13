@@ -9,7 +9,7 @@ const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
                 'fixed top-0 left-0 flex items-start justify-start w-full'
             }
         >
-            <Sidebar clientType="company" routes={['products', 'customers']} />
+            <Sidebar clientType="customer" routes={['payments', 'subscriptions']} />
             <div className="pl-20 py-12 w-full overflow-y-auto min-h-screen max-h-screen">
                 {children}
             </div>

@@ -19,6 +19,7 @@
     "@radix-ui/react-radio-group": "^1.2.0",
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-toast": "^1.2.1",
+    "@tanstack/react-query": "^5.51.1",
     "@tanstack/react-table": "^8.19.2",
     "@web3auth/base": "^8.8.0",
     "@web3auth/ethereum-provider": "^8.10.2",
