@@ -17,6 +17,7 @@ interface ICompanyWallet {
 }
 
 contract CustomerWallet is Ownable {
+
     event Deposit(uint256 amount);
     event Withdrawal(uint256 amount);
     event OneTimePayment(address indexed company, uint256 amount);
@@ -24,6 +25,11 @@ contract CustomerWallet is Ownable {
     event SubscriptionCancelled(address indexed company, bytes32 productId);
     event SubscriptionReactivated(address indexed company, bytes32 productId);
     event SubscriptionPaid(address indexed company, uint256 amount);
+
+    struct UserAccountData {
+        string name;
+        string email;
+    }
 
     /** 
      * @dev This data MUST be encrypted on client side or otherwise it can be accessed by anyone
@@ -50,6 +56,15 @@ contract CustomerWallet is Ownable {
         (bool sent, ) = owner().call{value: _amount}("");
         require(sent, "Failed to withdraw");
         emit Withdrawal(address(this).balance);
+    }
+
+    function updateUserData(UserAccountData memory _data) public onlyOwner {
+        if(bytes(_data.name).length > 0) {
+            name = _data.name;
+        }
+        if(bytes(_data.email).length > 0) {
+            email = _data.email;
+        }
     }
 
     function makeOneTimePayment(
