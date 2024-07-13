@@ -1,4 +1,3 @@
-"use client"
 import { DataTable } from "@/components/pages/company/data-table";
 import { ColumnDef } from "@tanstack/react-table"
 
@@ -13,7 +12,7 @@ export type Payment = {
   product: string
 }
 
-export const columns: ColumnDef<Payment>[] = [
+const columns: ColumnDef<Payment>[] = [
   {
     accessorKey: "name",
     header: "Name",
@@ -37,20 +36,20 @@ export const columns: ColumnDef<Payment>[] = [
 ]
 
 
-async function getData(): Promise<Payment[]> {
-    // Fetch data from your API here.
-    return [
-        {
-            id: "728ed52f",
-            name: "test",
-            amount: 100,
-            product: "test",
-            type: "oneTime",
-            status:"pending"
-        },
-        // ...
-    ]
-}
+// async function getData(): Promise<Payment[]> {
+//     // Fetch data from your API here.
+//     return [
+//         {
+//             id: "728ed52f",
+//             name: "test",
+//             amount: 100,
+//             product: "test",
+//             type: "oneTime",
+//             status:"pending"
+//         },
+//         // ...
+//     ]
+// }
 
 
 export default async function Page() {
