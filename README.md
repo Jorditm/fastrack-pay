@@ -29,7 +29,8 @@ When logged in, companies can create products (both single payment or subscripti
 Our contract has been deployed in the following chains:
 
 - Sepolia: [0x264B938d79B863493173C98Aa461a3486FFD3797](https://eth-sepolia.blockscout.com/address/0x264B938d79B863493173C98Aa461a3486FFD3797)
-- Arbitrum: [0xe6212d3516B0040B3f4824641902458B7F1Cb8F9](https://sepolia-explorer.arbitrum.io/address/0xe6212d3516B0040B3f4824641902458B7F1Cb8F9)
+- Arbitrum Sepolia: [0xe6212d3516B0040B3f4824641902458B7F1Cb8F9](https://sepolia-explorer.arbitrum.io/address/0xe6212d3516B0040B3f4824641902458B7F1Cb8F9)
+- Polygon zkEVM Cardona: [0x60E097484CD0222A62057EBCe6099913F77f8ED2](https://explorer-ui.cardona.zkevm-rpc.com/address/0x60E097484CD0222A62057EBCe6099913F77f8ED2) -> Unfortunately we were not able to verify in this chain.
 
 ### For users
 
