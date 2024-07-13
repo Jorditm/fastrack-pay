@@ -53,7 +53,7 @@ export default function CompanyForm() {
     writeContract({
       abi,
       address: CONTRACT_ADDRESS,
-      functionName: 'deployCustomerAccount',
+      functionName: 'deployCompanyAccount',
       args: [wallet],
     })
   }

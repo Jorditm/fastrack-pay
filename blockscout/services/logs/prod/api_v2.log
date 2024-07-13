@@ -44,3 +44,9 @@
 2024-07-13T00:32:20.326 application=api_v2 request_id=F-GecOKExg071KIAAIrl [info] Sent 200 in 12ms on GET /api/v2/main-page/indexing-status?
 2024-07-13T00:32:21.219 application=api_v2 request_id=F-GecRglgBe0vBMAAItl [info] Sent 200 in 5ms on GET /api/v2/transactions/stats?
 2024-07-13T00:32:21.279 application=api_v2 request_id=F-GecRskGUdgBEYAAJ4h [info] Sent 200 in 15ms on GET /api/v2/transactions?filter=validated
+2024-07-13T00:41:00.649 application=api_v2 request_id=F-Ge6gkhlZbTWH4AANdF [info] Sent 200 in 314µs on GET /api/v2/config/backend-version?
+2024-07-13T00:41:00.655 application=api_v2 request_id=F-Ge6gkKfVC5SXMAAOxi [info] Sent 200 in 7ms on GET /api/v2/main-page/indexing-status?
+2024-07-13T00:41:01.394 application=api_v2 request_id=F-Ge6jU826vFgZ0AAQ-j [info] Sent 200 in 5ms on GET /api/v2/transactions/stats?
+2024-07-13T00:41:01.435 application=api_v2 request_id=F-Ge6jdZM06VAA0AAOzC [info] Sent 200 in 10ms on GET /api/v2/transactions?filter=validated
+2024-07-13T00:41:07.235 application=api_v2 request_id=F-Ge65GC_5CzQO4AAO7i [info] Sent 200 in 3ms on GET /api/v2/transactions?filter=pending
+2024-07-13T00:41:09.687 application=api_v2 request_id=F-Ge7CO5vMY03KcAAO9i [info] Sent 200 in 2ms on GET /api/v2/tokens?
