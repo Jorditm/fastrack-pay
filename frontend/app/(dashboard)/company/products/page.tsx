@@ -31,6 +31,7 @@ import { CONTRACT_ADDRESS } from "@/lib/constants";
 import { abi } from '@/lib/wagmi/companyAbi'
 import useSession from "@/hooks/useSession";
 import useWeb3AuthCustomProvider from "@/hooks/useWeb3Auth";
+import Uploader from "@/components/upload/uploader";
 
 
 const formSchema = z.object({
@@ -52,6 +53,9 @@ const formSchema = z.object({
     interval: z.number().min(0, {
         message: "Interval must be at least 0.",
     }).nullable().optional(),
+    imageUrl: z.instanceof(File, {
+        message: "Image can't be empty.",
+    }),
 })
 
 export type Product = {
@@ -101,16 +105,16 @@ export default function Page() {
     const { setProvider, setLoggedIn } = useWeb3AuthCustomProvider()
 
     const provider = new Web3(web3auth.provider as any)
-    
+
     async function getAllProducts(): Promise<void> {
-            const contract = new provider.eth.Contract(JSON.parse(JSON.stringify(abi)), CONTRACT_ADDRESS);
-            const allProducts = await contract.methods.getProducts().call();
-            console.log("allProducts -->", allProducts)
-            setProducts(allProducts as Product[])
+        const contract = new provider.eth.Contract(JSON.parse(JSON.stringify(abi)), CONTRACT_ADDRESS);
+        const allProducts = await contract.methods.getProducts().call();
+        console.log("allProducts -->", allProducts)
+        setProducts(allProducts as Product[])
     }
 
     useEffect(() => {
-            getAllProducts()
+        getAllProducts()
     }, [provider, setProvider])
 
 
@@ -128,36 +132,37 @@ export default function Page() {
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         console.log(values)
-        const web3 = provider
-        const contract = new web3.eth.Contract(
-            JSON.parse(JSON.stringify(abi)),
-            CONTRACT_ADDRESS
-        )
-        const parsedValues = {
-            title: values.title,
-            price: Number(values.price),
-            description: values.description,
-            recurring: values.recurring === "true" ? true : false,
-            available: values.available === "true" ? true : false,
-            interval: Number(values.interval) * 86400,
-            imageUrl: "https://picsum.photos/id/40/4106/2806"
-        }
-        console.log(parsedValues)
-        const result = await contract.methods
-            .createProduct(parsedValues)
-            .send({ from: wallet as string })
-        if (result) {
-            console.log(result)
-            // const productContract = "0x" + result?.events?.ProductCreated.data.slice(-40)
-            // localStorage.setItem('product', productContract.toString())
-            // redirect('/company/products')
-        }
+        // const web3 = provider
+        // const contract = new web3.eth.Contract(
+        //     JSON.parse(JSON.stringify(abi)),
+        //     CONTRACT_ADDRESS
+        // )
+        // const parsedValues = {
+        //     title: values.title,
+        //     price: Number(values.price),
+        //     description: values.description,
+        //     recurring: values.recurring === "true" ? true : false,
+        //     available: values.available === "true" ? true : false,
+        //     interval: Number(values.interval) * 86400,
+        //     imageUrl: values.imageUrl
+        // }
+        // console.log(parsedValues)
+        // const result = await contract.methods
+        //     .createProduct(parsedValues)
+        //     .send({ from: wallet as string })
+        // if (result) {
+        //     console.log(result)
+        //     // const productContract = "0x" + result?.events?.ProductCreated.data.slice(-40)
+        //     // localStorage.setItem('product', productContract.toString())
+        //     // redirect('/company/products')
+        // }
     }
 
     useEffect(() => {
         form.setValue("interval", 0)
     }, [form.watch("recurring")])
 
+    console.log(form.formState.errors)
 
     return (
         <>
@@ -288,6 +293,22 @@ export default function Page() {
                                                 </FormControl>
                                             </FormItem>
                                         )}
+                                    />
+                                    <FormField
+                                        control={form.control}
+                                        name="imageUrl"
+                                        render={({ field }) => {
+                                            return (
+                                                <FormItem>
+                                                <FormLabel htmlFor="imageUrl">Image</FormLabel>
+                                                <FormControl>
+                                                    <div className='mt-12 w-full max-w-lg'>
+                                                        <Uploader onChange={(e) => field.onChange(e.target.files[0])} />
+                                                    </div>
+                                                </FormControl>
+                                                </FormItem>
+                                            )
+                                        }}
                                     />
 
                                 </div>
