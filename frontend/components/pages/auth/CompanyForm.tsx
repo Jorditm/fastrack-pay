@@ -23,6 +23,7 @@ import useWeb3AuthCustomProvider from '@/hooks/useWeb3Auth'
 import web3auth from '@/lib/web3auth/provider'
 import { Web3 } from 'web3'
 import { Result } from 'postcss'
+import { redirect } from 'next/navigation'
 
 const FormSchema = z.object({
   companyName: z.string().min(1, 'Company name is required'),
@@ -58,21 +59,18 @@ export default function CompanyForm() {
     console.log('data', data)
     //TODO: ADD THE DATA TO THE NEW CONTRACT
     const web3 = new Web3(web3auth.provider as any)
-    // const receipt = await web3.eth.signTransaction({
-    //   from: wallet as string,
-    //   to: CONTRACT_ADDRESS,
-    //   value: amount,
-    //   maxPriorityFeePerGas: "5000000000", // Max priority fee per gas
-    //   maxFeePerGas: "6000000000000", // Max fee per gas
-    // });
     const contract = new web3.eth.Contract(
       JSON.parse(JSON.stringify(abi)),
       CONTRACT_ADDRESS
     )
     const result = await contract.methods
-      .deployCompanyAccount(wallet as string)
+      .deployCompanyAccount(['patata', 'banana'])
       .send({ from: wallet as string })
-    console.log('created account', result)
+      if(result){
+        const companyAccountContract =  "0x" + result?.events?.CompanyAccountCreated.data.slice(-40)
+        localStorage.setItem('companyAccount', companyAccountContract.toString())
+        redirect('/company/products')
+      }
   }
   return (
     <Form {...form}>

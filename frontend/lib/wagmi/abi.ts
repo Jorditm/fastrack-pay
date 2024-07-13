@@ -46,6 +46,7 @@ export const abi: AbiItem[] = [
     anonymous: false,
     inputs: [
       {
+        indexed: false,
         internalType: "address",
         name: "_contract",
         type: "address"
@@ -58,6 +59,7 @@ export const abi: AbiItem[] = [
     anonymous: false,
     inputs: [
       {
+        indexed: false,
         internalType: "address",
         name: "_contract",
         type: "address"
@@ -130,9 +132,21 @@ export const abi: AbiItem[] = [
   {
     inputs: [
       {
-        internalType: "address",
-        name: "_company",
-        type: "address"
+        components: [
+          {
+            internalType: "string",
+            name: "name",
+            type: "string"
+          },
+          {
+            internalType: "string",
+            name: "logoUrl",
+            type: "string"
+          }
+        ],
+        internalType: "struct Factory.CompanyAccountData",
+        name: "_data",
+        type: "tuple"
       }
     ],
     name: "deployCompanyAccount",
@@ -149,9 +163,21 @@ export const abi: AbiItem[] = [
   {
     inputs: [
       {
-        internalType: "address",
-        name: "_customer",
-        type: "address"
+        components: [
+          {
+            internalType: "string",
+            name: "name",
+            type: "string"
+          },
+          {
+            internalType: "string",
+            name: "email",
+            type: "string"
+          }
+        ],
+        internalType: "struct Factory.UserAccountData",
+        name: "_data",
+        type: "tuple"
       }
     ],
     name: "deployCustomerAccount",

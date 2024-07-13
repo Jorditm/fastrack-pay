@@ -10,12 +10,12 @@ export const clientId =
 
  const chainConfig = {
   chainNamespace: CHAIN_NAMESPACES.EIP155,
-  chainId: '0xaa36a7', // Please use 0x1 for Mainnet
-  rpcTarget: 'https://eth-sepolia.g.alchemy.com/v2/demo',
-  displayName: 'Scroll',
-  blockExplorerUrl: 'https://eth.blockscout.com/',
-  ticker: 'SCRL',
-  tickerName: 'SCROLL',
+  chainId: "0xaa36a7",
+  rpcTarget: "https://eth-sepolia.g.alchemy.com/v2/F-tuWTTjOf3oo7e1PpXfnc8QTJKuT5n0",
+  displayName: "Ethereum Sepolia Testnet",
+  blockExplorerUrl: "https://sepolia.etherscan.io",
+  ticker: "ETH",
+  tickerName: "Ethereum",
 }
 
 export const privateKeyProvider = new EthereumPrivateKeyProvider({
