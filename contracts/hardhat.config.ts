@@ -23,9 +23,27 @@ const config: HardhatUserConfig = {
     sepolia: {
       url: ALCHEMY_SEPOLIA_URL!,
       accounts: [WALLET_PRIVATE_KEY!]
-    }
+    },
   },
-  defaultNetwork: "localhost"
+  defaultNetwork: "localhost",
+  etherscan: {
+    apiKey: {
+      sepolia: "notbeingused"
+    },
+    customChains: [
+      {
+        network: "sepolia",
+        chainId: 11155111,
+        urls: {
+          apiURL: "https://eth-sepolia.blockscout.com/api",
+          browserURL: "https://eth-sepolia.blockscout.com/",
+        }
+      }
+    ],
+  },
+  sourcify: {
+    enabled: false
+  }
 };
 
 export default config;
