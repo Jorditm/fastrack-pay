@@ -132,6 +132,10 @@ export default function Page() {
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         console.log(values)
+        const ipfsCid = await uploadToLighhouse(values.imageUrl.name, values.imageUrl)
+        if (ipfsCid !== null) {
+            console.log("submiiit", ipfsCid)
+        }
         // const web3 = provider
         // const contract = new web3.eth.Contract(
         //     JSON.parse(JSON.stringify(abi)),
@@ -157,6 +161,57 @@ export default function Page() {
         //     // redirect('/company/products')
         // }
     }
+    const uploadToLighhouse = async (fileName: string, file: any) => {
+
+        const formData = new FormData()
+        // Extract the file extension
+        const fileExtension = fileName.slice(
+            ((fileName.lastIndexOf('.') - 1) >>> 0) + 2
+        )
+
+        // Append the file extension to the game hash
+        const newGame = new File([file], fileName)
+
+        formData.append('file', newGame)
+
+        fetch('https://node.lighthouse.storage/api/v0/add', {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${process.env.NEXT_PUBLIC_LIGHTHOUSE_API_KEY}`,
+            },
+            body: formData,
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.Hash) {
+                    console.log("entra", data.Hash)
+
+                    // setUploadedSuccessfully(true)
+                    // setIsSubmitting(false)
+                    // setUploadGame(false)
+
+                    const ipfsCid = data.Hash
+                    if (ipfsCid) {
+                        return ipfsCid
+                    }
+                    return null
+                    // writeContract({
+                    //     abi: abi,
+                    //     address: CONTRACT_ADDRESS,
+                    //     functionName: 'createProduct',
+                    //     args: [game.gameHash, ipfsCid, 'image not uploaded'],
+                    //     chainId: sepolia.id,
+                    // })
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error)
+                return null
+            })
+
+    }
+
+
 
     useEffect(() => {
         form.setValue("interval", 0)
@@ -300,12 +355,12 @@ export default function Page() {
                                         render={({ field }) => {
                                             return (
                                                 <FormItem>
-                                                <FormLabel htmlFor="imageUrl">Image</FormLabel>
-                                                <FormControl>
-                                                    <div className='mt-12 w-full max-w-lg'>
-                                                        <Uploader file={field.value} onChange={field.onChange} />
-                                                    </div>
-                                                </FormControl>
+                                                    <FormLabel htmlFor="imageUrl">Image</FormLabel>
+                                                    <FormControl>
+                                                        <div className='mt-12 w-full max-w-lg'>
+                                                            <Uploader file={field.value} onChange={field.onChange} />
+                                                        </div>
+                                                    </FormControl>
                                                 </FormItem>
                                             )
                                         }}
