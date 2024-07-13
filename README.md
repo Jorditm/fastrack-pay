@@ -32,6 +32,8 @@ Our contract has been deployed in the following chains:
 - Arbitrum Sepolia: [0xe6212d3516B0040B3f4824641902458B7F1Cb8F9](https://sepolia-explorer.arbitrum.io/address/0xe6212d3516B0040B3f4824641902458B7F1Cb8F9)
 - Polygon zkEVM Cardona: [0x60E097484CD0222A62057EBCe6099913F77f8ED2](https://explorer-ui.cardona.zkevm-rpc.com/address/0x60E097484CD0222A62057EBCe6099913F77f8ED2) -> Unfortunately we were not able to verify in this chain.
 
+We also deployed a TheGraph for Sepolia: [here](https://api.studio.thegraph.com/query/62919/fastrack-pay-sepolia/v0.0.1)
+
 ### For users
 
 The experience is similar to PayPal: our solution can be implemented by companies in their pages - e-commerce, SaaS, etc. -, users must create an account the first time and fund it (either with native or pre-approved ERC20 tokens) 
