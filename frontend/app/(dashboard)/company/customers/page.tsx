@@ -59,10 +59,8 @@ export default async function Page() {
     return (
 
         <>
-            <div>
-                <h1 className="text-2xl font-bold">Customers</h1>
-            </div>
-            <div className="container mx-auto py-10">
+      <h1 className='text-2xl font-bold'>My payments</h1>
+      <div className='mt-2 w-full'>
                 <DataTable columns={columns} data={data} />
             </div>
         </>

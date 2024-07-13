@@ -62,8 +62,7 @@ export default function PersonForm() {
     if (data) {
       const userAddres = '0x' + data.logs[1].data.slice(-40)
       localStorage.setItem('userAddress', userAddres)
-      //TODO: REDIRECT TO CORREECT ROUTE
-      redirect('/personal/subscriptions')
+      redirect('/customer/payments')
     }
   }, [data])
 
