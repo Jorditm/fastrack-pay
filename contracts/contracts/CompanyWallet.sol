@@ -42,6 +42,9 @@ contract CompanyWallet is Ownable {
         bytes32 productId;
     }
 
+    string public name;
+    string public logoUrl;
+
     bytes32[] public productIds;
     address[] public clientsList;
     mapping(bytes32 => ProductInfo) public productsInfo;
@@ -50,8 +53,13 @@ contract CompanyWallet is Ownable {
 
 
     constructor(
-        address _owner
-    ) Ownable(_owner) {}
+        address _owner,
+        string memory _name,
+        string memory _logoUrl
+    ) Ownable(_owner) {
+        name = _name;
+        logoUrl = _logoUrl;
+    }
 
     function deposit() public payable onlyOwner {
         emit Deposit(msg.value);
