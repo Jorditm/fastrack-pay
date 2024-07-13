@@ -22,8 +22,11 @@ import { waitForTransactionReceipt } from '@wagmi/core'
 import useWeb3AuthCustomProvider from '@/hooks/useWeb3Auth'
 import web3auth from '@/lib/web3auth/provider'
 import { Web3 } from 'web3'
+import { ethers, Eip1193Provider } from 'ethers'
 import { Result } from 'postcss'
 import { redirect } from 'next/navigation'
+import { CallWithERC2771Request, GelatoRelay, SignerOrProvider } from "@gelatonetwork/relay-sdk"
+import { Provider } from '@radix-ui/react-toast'
 
 const FormSchema = z.object({
   companyName: z.string().min(1, 'Company name is required'),
@@ -55,21 +58,48 @@ export default function CompanyForm() {
   const config = useConfig()
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
+
+    const relay = new GelatoRelay();
+
     const { companyName, email, password } = data
-    //TODO: ADD THE DATA TO THE NEW CONTRACT
-    const web3 = new Web3(web3auth.provider as any)
-    const contract = new web3.eth.Contract(
-      JSON.parse(JSON.stringify(abi)),
-      CONTRACT_ADDRESS
-    )
-    const result = await contract.methods
-      .deployCompanyAccount(['patata', 'banana'])
-      .send({ from: wallet as string })
-      if(result){
+
+    const ethersProvider = new ethers.BrowserProvider(web3auth.provider as Eip1193Provider)
+    const signer = await ethersProvider.getSigner()
+    console.log(signer)
+    const user = await signer.getAddress()
+    const contract = new ethers.Contract(CONTRACT_ADDRESS, abi, signer)
+
+    console.log("contract", contract)
+
+    const { data: txData} = await contract.deployCompanyAccount.populateTransaction({
+      name: "banana",
+      logoUrl: 'https://www.google.com'
+    })
+
+    console.log("txData", txData)
+
+
+    const request: CallWithERC2771Request = {
+      chainId: (await ethersProvider.getNetwork()).chainId,
+      target: CONTRACT_ADDRESS,
+      data: txData,
+      user: user,
+    }    
+    const GELATO_API_KEY="c3KruXJBGkyYZwXLVNbHKVjVrTxbAq1BB0WDxlSw_Sc_"
+
+    const relayResponse = await relay.sponsoredCallERC2771(request, ethersProvider as unknown as SignerOrProvider, GELATO_API_KEY)
+
+
+
+    const status = await relay.getTaskStatus(relayResponse.taskId)
+
+    console.log(status);
+
+      /*if(result){
         const companyAccountContract =  "0x" + result?.events?.CompanyAccountCreated.data.slice(-40)
         localStorage.setItem('companyAccount', companyAccountContract.toString())
         redirect('/company/products')
-      }
+      }*/
   }
   return (
     <Form {...form}>
