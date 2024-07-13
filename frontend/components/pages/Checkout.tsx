@@ -1,6 +1,6 @@
 "use client";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/CustomInput";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Card } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
+import { Label } from "../ui/label";
 
 const FormSchema = z.object({
     companyName: z.string().min(1, "Company name is required"),
@@ -20,9 +21,8 @@ const FormSchema = z.object({
 });
 
 export default function Checkout() {
-    const [type, setType] = useState<"company" | "person">("company");
     const router = useRouter();
-
+    const searchParams = useSearchParams()
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -35,6 +35,11 @@ export default function Checkout() {
             interval: "",
         },
     });
+    function secondsToDays(seconds: number) {
+        const secondsInADay = 86400;
+        const days = seconds / secondsInADay;
+        return days;
+    }
 
     const onSubmit = async (data: z.infer<typeof FormSchema>) => {
         const { companyName, title, description, available, recurring, interval } = data;
@@ -63,7 +68,7 @@ export default function Checkout() {
                             <div className="flex flex-col items-start justify-start">
 
                                 <p className="">Price</p>
-                                <p className="text-2xl">2ETH</p>
+                                <p className="text-2xl">{searchParams && searchParams?.get("price")} ETH</p>
                             </div>
                         </div>
                         <div className="w-72 h-72 flex items-center justify-center border border-primary rounded-lg">
@@ -76,120 +81,44 @@ export default function Checkout() {
                                 <h1 className="text-3xl font-bold">Checkout</h1>
                             </div>
                             <div className="flex w-full flex-col gap-6">
-                                <Form {...form}>
-                                    <form className="w-full flex flex-col gap-6" onSubmit={form.handleSubmit(onSubmit)}>
-                                        <div className="fw-full lex flex-col gap-2">
-                                            <FormField
-                                                control={form.control}
-                                                name="companyName"
-                                                render={({ field }) => (
-                                                    <FormItem>
-                                                        <FormLabel htmlFor="name">Company name</FormLabel>
-                                                        <FormControl>
-                                                            <Input
-                                                                id="name"
-                                                                value={field.value}
-                                                                onChange={(e) => field.onChange(e.target.value)}
-                                                                className="col-span-2 h-10"
-                                                            />
-                                                        </FormControl>
-                                                    </FormItem>
-                                                )}
-                                            />
-                                            <FormField
-                                                control={form.control}
-                                                name="title"
-                                                render={({ field }) => (
-                                                    <FormItem>
-                                                        <FormLabel htmlFor="price">Product title</FormLabel>
-                                                        <FormControl>
-                                                            <Input
-                                                                id="price"
-                                                                type="number"
-                                                                value={field.value}
-                                                                onChange={(e) => field.onChange(e.target.valueAsNumber)}
-                                                                className="col-span-2 h-10"
-                                                            />
-                                                        </FormControl>
-                                                    </FormItem>
-                                                )}
-                                            />
 
-                                            <FormField
-                                                control={form.control}
-                                                name="description"
-                                                render={({ field }) => (
-                                                    <FormItem>
-                                                        <FormLabel htmlFor="status">Description</FormLabel>
-                                                        <FormControl>
-                                                            <Input
-                                                                id="type"
-                                                                value={field.value}
-                                                                onChange={(e) => field.onChange(e.target.value)}
-                                                                className="col-span-2 h-10"
-                                                            />
-                                                        </FormControl>
-                                                    </FormItem>
-                                                )}
-                                            />
-                                            <FormField
-                                                control={form.control}
-                                                name="available"
-                                                render={({ field }) => (
-                                                    <FormItem>
-                                                        <FormLabel htmlFor="status">Available</FormLabel>
-                                                        <FormControl>
-                                                            <Input
-                                                                id="type"
-                                                                value={field.value}
-                                                                onChange={(e) => field.onChange(e.target.value)}
-                                                                className="col-span-2 h-10"
-                                                            />
-                                                        </FormControl>
-                                                    </FormItem>
-                                                )}
-                                            />
-                                            <FormField
-                                                control={form.control}
-                                                name="recurring"
-                                                render={({ field }) => (
-                                                    <FormItem>
-                                                        <FormLabel htmlFor="status">Recurring</FormLabel>
-                                                        <FormControl>
-                                                            <Input
-                                                                id="type"
-                                                                value={field.value}
-                                                                onChange={(e) => field.onChange(e.target.value)}
-                                                                className="col-span-2 h-10"
-                                                            />
-                                                        </FormControl>
-                                                    </FormItem>
-                                                )}
-                                            />
-                                            <FormField
-                                                control={form.control}
-                                                name="interval"
-                                                render={({ field }) => (
-                                                    <FormItem>
-                                                        <FormLabel htmlFor="status">Interval</FormLabel>
-                                                        <FormControl>
-                                                            <Input
-                                                                id="type"
-                                                                value={field.value}
-                                                                onChange={(e) => field.onChange(e.target.value)}
-                                                                className="col-span-2 h-10"
-                                                            />
-                                                        </FormControl>
-                                                    </FormItem>
-                                                )}
-                                            />
+                                <div className="w-full flex flex-col gap-6" onSubmit={form.handleSubmit(onSubmit)}>
+                                    <div className="w-full flex flex-col gap-4">
 
+                                        <div className="space-y-2">
+                                            <Label className="text-primary" htmlFor="name">Company name</Label>
+                                            <p className="ml-4">{searchParams && searchParams?.get("companyName")}</p>
                                         </div>
-                                        <div className="w-full">
-                                            <Button className="w-full" type="submit">Pay</Button>
+                                        <div className="space-y-2">
+
+                                            <Label className="text-primary" htmlFor="name">Product name</Label>
+                                            <p className="ml-4">{searchParams && searchParams?.get("title")}</p>
                                         </div>
-                                    </form>
-                                </Form>
+                                        <div className="space-y-2">
+
+                                            <Label className="text-primary" htmlFor="name">Product description</Label>
+                                            <p className="ml-4">{searchParams && searchParams?.get("description")}</p>
+                                        </div>
+                                        <div className="space-y-2">
+
+                                            <Label className="text-primary" htmlFor="name">Product price</Label>
+                                            <p className="ml-4">{searchParams && searchParams?.get("price")}</p>
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <Label className="text-primary" htmlFor="name">Product recurring</Label>
+                                            <p className="ml-4">{searchParams && searchParams?.get("recurring")}</p>
+                                        </div>
+                                        <div className="space-y-2">
+                                            <Label className="text-primary" htmlFor="name">Product interval</Label>
+                                            <p className="ml-4">{searchParams && secondsToDays(Number(searchParams?.get("interval")))} days</p>
+                                        </div>
+
+                                    </div>
+                                    <div className="w-full">
+                                        <Button className="w-full" type="button">Pay</Button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
