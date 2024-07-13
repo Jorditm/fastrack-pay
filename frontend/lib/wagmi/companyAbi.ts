@@ -2,8 +2,16 @@ interface AbiInput {
   internalType: string
   name: string
   type: string
-  indexed?: boolean // Add this line
-  
+  indexed?: boolean
+  components?: AbiInput[] // Add t // Add this line
+}
+
+interface AbiOutput {
+  internalType: string
+  name: string
+  type: string
+  components?: AbiOutput[] // Add this line
+
 }
 
 interface AbiItem {
@@ -12,11 +20,10 @@ interface AbiItem {
   type: string
   name?: string
   anonymous?: boolean
-  outputs?: { internalType: string; name: string; type: string }[]
-  
+  outputs?: AbiOutput[]
 }
 
-export const abi: AbiItem[] = [
+export const abiCompany: AbiItem[] = [
   {
     inputs: [
       {
