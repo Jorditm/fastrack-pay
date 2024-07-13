@@ -90,7 +90,7 @@ export default function Page() {
     return (
         <>
             <div className="flex justify-between items-center">
-                <h1 className="text-2xl font-bold">Products</h1>
+                <h1 className="text-2xl font-bold">Subscriptions</h1>
                 <Sheet>
                     <SheetTrigger asChild>
                         <Button variant="default">New Subscription</Button>

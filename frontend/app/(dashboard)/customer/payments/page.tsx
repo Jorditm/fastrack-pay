@@ -1,6 +1,5 @@
 "use client"
 import { DataTable } from "@/components/pages/company/data-table";
-
 import { ColumnDef } from "@tanstack/react-table"
 
 // This type is used to define the shape of our data.
@@ -55,7 +54,7 @@ async function getData(): Promise<Payment[]> {
 
 
 export default async function Page() {
-    const data = await getData()
+    // const data = await getData()
 
     return (
 
@@ -64,7 +63,7 @@ export default async function Page() {
                 <h1 className="text-2xl font-bold">My payments</h1>
             </div>
             <div className="container mx-auto py-10">
-                <DataTable columns={columns} data={data} />
+                <DataTable columns={columns} data={[]} />
             </div>
         </>
     )
