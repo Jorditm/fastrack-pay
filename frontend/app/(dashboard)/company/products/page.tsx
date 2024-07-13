@@ -45,7 +45,7 @@ export type Payment = {
     type: string
 }
 
-export const columns: ColumnDef<Payment>[] = [
+const columns: ColumnDef<Payment>[] = [
     {
         accessorKey: "status",
         header: "Status",
@@ -65,19 +65,19 @@ export const columns: ColumnDef<Payment>[] = [
 ]
 
 
-async function getData(): Promise<Payment[]> {
-    // Fetch data from your API here.
-    return [
-        {
-            id: "728ed52f",
-            amount: 100,
-            name: "test",
-            type: "oneTime",
-            status: "active"
-        },
-        // ...
-    ]
-}
+// async function getData(): Promise<Payment[]> {
+//     // Fetch data from your API here.
+//     return [
+//         {
+//             id: "728ed52f",
+//             amount: 100,
+//             name: "test",
+//             type: "oneTime",
+//             status: "active"
+//         },
+//         // ...
+//     ]
+// }
 
 
 export default function Page() {
@@ -93,7 +93,7 @@ export default function Page() {
     })
 
     const onSubmit = (values: z.infer<typeof formSchema>) => {
-        console.log(values)
+        console.warn(values)
     }
 
     return (

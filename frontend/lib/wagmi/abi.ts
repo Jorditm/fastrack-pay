@@ -3,6 +3,7 @@ interface AbiInput {
   name: string;
   type: string;
   indexed?: boolean; // Add this line
+  components?: AbiInput[];
 }
 
 interface AbiItem {
@@ -12,6 +13,7 @@ interface AbiItem {
   name?: string;
   anonymous?: boolean;
   outputs?: { internalType: string; name: string; type: string }[];
+  components?: AbiInput[];
 }
 
 export const abi: AbiItem[] = [
