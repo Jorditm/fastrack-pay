@@ -5,6 +5,7 @@ import "hardhat-gas-reporter";
 
 const WALLET_PRIVATE_KEY=process.env.WALLET_PRIVATE_KEY;
 const ALCHEMY_SEPOLIA_URL=process.env.ALCHEMY_SEPOLIA_URL;
+const ETHERSCAN_API_KEY=process.env.ETHERSCAN_API_KEY;
 
 const config: HardhatUserConfig = {
   solidity: {
@@ -28,7 +29,7 @@ const config: HardhatUserConfig = {
   defaultNetwork: "localhost",
   etherscan: {
     apiKey: {
-      sepolia: "notbeingused"
+      sepolia: ETHERSCAN_API_KEY!
     },
     customChains: [
       {

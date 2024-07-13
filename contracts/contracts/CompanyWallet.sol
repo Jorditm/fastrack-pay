@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.26;
 import "@openzeppelin/contracts/access/Ownable.sol";
+import {ERC2771Context} from "@gelatonetwork/relay-context/contracts/vendor/ERC2771Context.sol";
 
 interface ICustomerWallet {
     function payForSubscription(bytes32 _productId) external returns (bool); 
@@ -13,7 +14,7 @@ interface IERC20Context {
     function isERC20TokenWhitelisted(address _token) external view returns (bool);
 }
 
-contract CompanyWallet is Ownable {
+contract CompanyWallet is Ownable, ERC2771Context {
 
     event Deposit(uint256 amount);
     event Withdrawal(uint256 amount);
@@ -63,14 +64,22 @@ contract CompanyWallet is Ownable {
     mapping(address => bytes32[]) public customerSubscriptions;
     mapping(address => mapping(bytes32 => CustomerSubscriptionInfo)) public CustomerSubscriptionsInfos;
 
-
     constructor(
         address _owner,
+        address trustedForwarder,
         string memory _name,
         string memory _logoUrl
-    ) Ownable(_owner) {
+    ) Ownable(_owner) ERC2771Context(trustedForwarder) {
         name = _name;
         logoUrl = _logoUrl;
+    }
+
+    function _msgData() internal view override(Context, ERC2771Context) returns (bytes calldata) {
+        return ERC2771Context._msgData();
+    }
+
+    function _msgSender() internal view override(Context, ERC2771Context) returns (address) {
+        return ERC2771Context._msgSender();
     }
 
     function deposit() public payable onlyOwner {

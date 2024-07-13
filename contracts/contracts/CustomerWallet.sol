@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.26;
 import "@openzeppelin/contracts/access/Ownable.sol";
+import {ERC2771Context} from "@gelatonetwork/relay-context/contracts/vendor/ERC2771Context.sol";
 
 interface ICompanyWallet {
     function addPayment(address _customer, bytes32 _productId) external payable;
@@ -20,11 +21,12 @@ interface ICompanyWallet {
  * @dev For some reason if the name is the same as in the CompanyWallet.sol it does not work
  */
 interface IFactory {
-    function isERC20TokenWhitelisted(address _token) external view returns (bool);
+    function isERC20TokenWhitelisted(
+        address _token
+    ) external view returns (bool);
 }
 
-contract CustomerWallet is Ownable {
-
+contract CustomerWallet is Ownable, ERC2771Context {
     event Deposit(uint256 amount);
     event Withdrawal(uint256 amount);
     event OneTimePayment(address indexed company, uint256 amount);
@@ -38,7 +40,7 @@ contract CustomerWallet is Ownable {
         string email;
     }
 
-    /** 
+    /**
      * @dev This data MUST be encrypted on client side or otherwise it can be accessed by anyone
      */
     string public name;
@@ -49,9 +51,32 @@ contract CustomerWallet is Ownable {
      */
     mapping(address => bytes32[]) public subscriptions;
 
-    constructor(address _owner, string memory _name, string memory _email) Ownable(_owner) {
+    constructor(
+        address _owner,
+        address trustedForwarder,
+        string memory _name,
+        string memory _email
+    ) Ownable(_owner) ERC2771Context(trustedForwarder) {
         name = _name;
         email = _email;
+    }
+
+    function _msgSender()
+        internal
+        view
+        override(Context, ERC2771Context)
+        returns (address)
+    {
+        return ERC2771Context._msgSender();
+    }
+
+    function _msgData()
+        internal
+        view
+        override(Context, ERC2771Context)
+        returns (bytes calldata)
+    {
+        return ERC2771Context._msgData();
     }
 
     function deposit() public payable onlyOwner {
@@ -66,10 +91,10 @@ contract CustomerWallet is Ownable {
     }
 
     function updateUserData(UserAccountData memory _data) public onlyOwner {
-        if(bytes(_data.name).length > 0) {
+        if (bytes(_data.name).length > 0) {
             name = _data.name;
         }
-        if(bytes(_data.email).length > 0) {
+        if (bytes(_data.email).length > 0) {
             email = _data.email;
         }
     }

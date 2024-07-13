@@ -12,6 +12,7 @@
     "hardhat-gas-reporter": "^2.2.0"
   },
   "dependencies": {
+    "@gelatonetwork/relay-context": "^3.2.0",
     "@openzeppelin/contracts": "^5.0.2",
     "dotenv": "^16.4.5"
   }
