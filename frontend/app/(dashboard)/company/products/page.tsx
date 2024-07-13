@@ -34,10 +34,18 @@ import { useEffect, useState } from 'react'
 import Web3 from 'web3'
 import web3auth from '@/lib/web3auth/provider'
 import { CONTRACT_ADDRESS } from '@/lib/constants'
-import { abi, abiCompany } from '@/lib/wagmi/companyAbi'
+import { abiCompany } from '@/lib/wagmi/companyAbi'
 import useSession from '@/hooks/useSession'
 import useWeb3AuthCustomProvider from '@/hooks/useWeb3Auth'
 import Uploader from '@/components/upload/uploader'
+import { ethers, Eip1193Provider } from 'ethers'
+import { redirect } from 'next/navigation'
+import {
+  CallWithERC2771Request,
+  GelatoRelay,
+  SignerOrProvider,
+} from '@gelatonetwork/relay-sdk'
+import { toast } from '@/components/ui/use-toast'
 
 const formSchema = z.object({
   title: z.string().min(2, {
@@ -108,22 +116,26 @@ export default function Page() {
   const [products, setProducts] = useState<Product[]>([])
   const { user, wallet } = useSession()
   const { setProvider, setLoggedIn } = useWeb3AuthCustomProvider()
+  const [loading, setLoading] = useState(false)
+  const [transactionHash, setTransactionHash] = useState<`0x${string}` | null>(
+    null
+  )
 
   const provider = new Web3(web3auth.provider as any)
 
-  async function getAllProducts(): Promise<void> {
-    const contract = new provider.eth.Contract(
-      JSON.parse(JSON.stringify(abi)),
-      CONTRACT_ADDRESS
-    )
-    const allProducts = await contract.methods.getProducts().call()
-    console.log('allProducts -->', allProducts)
-    setProducts(allProducts as Product[])
-  }
+  //   async function getAllProducts(): Promise<void> {
+  //     const contract = new provider.eth.Contract(
+  //       JSON.parse(JSON.stringify(abi)),
+  //       CONTRACT_ADDRESS
+  //     )
+  //     const allProducts = await contract.methods.getProducts().call()
+  //     console.log('allProducts -->', allProducts)
+  //     setProducts(allProducts as Product[])
+  //   }
 
-  useEffect(() => {
-    getAllProducts()
-  }, [provider, setProvider])
+  //   useEffect(() => {
+  //     getAllProducts()
+  //   }, [provider, setProvider])
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -138,13 +150,20 @@ export default function Page() {
   })
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values)
+    setLoading(true)    
+    const relay = new GelatoRelay()
     const ipfsCid = await uploadToLighhouse(
       values.imageUrl.name,
       values.imageUrl
     )
     if (ipfsCid) {
-      const web3 = new Web3(web3auth.provider as any)
+      const ethersProvider = new ethers.BrowserProvider(
+        web3auth.provider as Eip1193Provider
+      )
+      const signer = await ethersProvider.getSigner()
+      const user = await signer.getAddress()
+      const contract = new ethers.Contract(CONTRACT_ADDRESS, abiCompany, signer)
+
       const parsedValues = {
         title: values.title,
         price: Number(values.price),
@@ -154,42 +173,50 @@ export default function Page() {
         interval: Number(values.interval) * 86400,
         imageUrl: ipfsCid,
       }
-      const contract = new web3.eth.Contract(
-        JSON.parse(JSON.stringify(abiCompany)),
-        CONTRACT_ADDRESS
+      const { data: txData } =
+        await contract.createProduct.populateTransaction(parsedValues)
+
+      const request: CallWithERC2771Request = {
+        chainId: (await ethersProvider.getNetwork()).chainId,
+        target: CONTRACT_ADDRESS,
+        data: txData,
+        user: user,
+      }
+      const GELATO_API_KEY = 'c3KruXJBGkyYZwXLVNbHKVjVrTxbAq1BB0WDxlSw_Sc_'
+
+      const relayResponse = await relay.sponsoredCallERC2771(
+        request,
+        ethersProvider as unknown as SignerOrProvider,
+        GELATO_API_KEY
       )
-      const result = await contract.methods
-        .createProduct(parsedValues)
-        .send({ from: wallet as string })
+
+      const checkStatus = async () => {
+        const status = await relay.getTaskStatus(relayResponse.taskId)
+
+        if (status?.taskState === 'ExecSuccess') {
+          clearInterval(statusInterval)
+          if (status.transactionHash) {
+            setTransactionHash(status?.transactionHash as `0x${string}`)
+          }
+        }
+        if (status?.taskState === 'Cancelled') {
+          clearInterval(statusInterval)
+          setLoading(false)
+          toast({
+            title: 'Error',
+            description: 'Transaction cancelled',
+            variant: 'destructive',
+          })
+        }
+      }
       if (result) {
+        //TODO: inside interval successfull
         //TODO: the product is saved, close the popover with one useState in sheet, to controlled component
         //TODO: redirect to /company/products and using wagmi and useQuery, use the method refetch
       }
+
+      const statusInterval = setInterval(checkStatus, 5000) // Poll every 5 seconds
     }
-    // const web3 = provider
-    // const contract = new web3.eth.Contract(
-    //     JSON.parse(JSON.stringify(abi)),
-    //     CONTRACT_ADDRESS
-    // )
-    // const parsedValues = {
-    //     title: values.title,
-    //     price: Number(values.price),
-    //     description: values.description,
-    //     recurring: values.recurring === "true" ? true : false,
-    //     available: values.available === "true" ? true : false,
-    //     interval: Number(values.interval) * 86400,
-    //     imageUrl: values.imageUrl
-    // }
-    // console.log(parsedValues)
-    // const result = await contract.methods
-    //     .createProduct(parsedValues)
-    //     .send({ from: wallet as string })
-    // if (result) {
-    //     console.log(result)
-    //     // const productContract = "0x" + result?.events?.ProductCreated.data.slice(-40)
-    //     // localStorage.setItem('product', productContract.toString())
-    //     // redirect('/company/products')
-    // }
   }
   const uploadToLighhouse = async (
     fileName: string,
