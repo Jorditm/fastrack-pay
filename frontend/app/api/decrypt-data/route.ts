@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import crypto from 'crypto'
 
-export function decryptData(encryptedString: string) {
+function decryptData(encryptedString: string) {
   const buff = Buffer.from(encryptedString, 'base64')
   const decipher = crypto.createDecipheriv(
     process.env.ENCRYPTION_METHOD!,
