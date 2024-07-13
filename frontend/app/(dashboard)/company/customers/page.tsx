@@ -1,4 +1,3 @@
-"use client"
 import { DataTable } from "@/components/pages/company/data-table";
 
 import { ColumnDef } from "@tanstack/react-table"
@@ -14,7 +13,7 @@ export type Payment = {
   product: string
 }
 
-export const columns: ColumnDef<Payment>[] = [
+const columns: ColumnDef<Payment>[] = [
   {
     accessorKey: "name",
     header: "Name",
