@@ -1,191 +1,205 @@
-export const abi = [
+interface AbiInput {
+  internalType: string;
+  name: string;
+  type: string;
+  indexed?: boolean; // Add this line
+}
+
+interface AbiItem {
+  inputs?: AbiInput[]; // Update to use AbiInput
+  stateMutability?: string;
+  type: string;
+  name?: string;
+  anonymous?: boolean;
+  outputs?: { internalType: string; name: string; type: string }[];
+}
+
+export const abi: AbiItem[] = [
   {
-    "inputs": [],
-    "stateMutability": "payable",
-    "type": "constructor"
+    inputs: [],
+    stateMutability: "payable",
+    type: "constructor"
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "address",
-        "name": "owner",
-        "type": "address"
+        internalType: "address",
+        name: "owner",
+        type: "address"
       }
     ],
-    "name": "OwnableInvalidOwner",
-    "type": "error"
+    name: "OwnableInvalidOwner",
+    type: "error"
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
+        internalType: "address",
+        name: "account",
+        type: "address"
       }
     ],
-    "name": "OwnableUnauthorizedAccount",
-    "type": "error"
+    name: "OwnableUnauthorizedAccount",
+    type: "error"
   },
   {
-    "anonymous": false,
-    "inputs": [
+    anonymous: false,
+    inputs: [
       {
-        "indexed": false,
-        "internalType": "address",
-        "name": "_contract",
-        "type": "address"
+        internalType: "address",
+        name: "_contract",
+        type: "address"
       }
     ],
-    "name": "CompanyAccountCreated",
-    "type": "event"
+    name: "CompanyAccountCreated",
+    type: "event"
   },
   {
-    "anonymous": false,
-    "inputs": [
+    anonymous: false,
+    inputs: [
       {
-        "indexed": false,
-        "internalType": "address",
-        "name": "_contract",
-        "type": "address"
+        internalType: "address",
+        name: "_contract",
+        type: "address"
       }
     ],
-    "name": "CustomerAccountCreated",
-    "type": "event"
+    name: "CustomerAccountCreated",
+    type: "event"
   },
   {
-    "anonymous": false,
-    "inputs": [
+    anonymous: false,
+    inputs: [
       {
-        "indexed": true,
-        "internalType": "address",
-        "name": "previousOwner",
-        "type": "address"
+        indexed: true,
+        internalType: "address",
+        name: "previousOwner",
+        type: "address"
       },
       {
-        "indexed": true,
-        "internalType": "address",
-        "name": "newOwner",
-        "type": "address"
+        indexed: true,
+        internalType: "address",
+        name: "newOwner",
+        type: "address"
       }
     ],
-    "name": "OwnershipTransferred",
-    "type": "event"
+    name: "OwnershipTransferred",
+    type: "event"
   },
   {
-    "stateMutability": "payable",
-    "type": "fallback"
+    stateMutability: "payable",
+    type: "fallback"
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
+        internalType: "address",
+        name: "",
+        type: "address"
       }
     ],
-    "name": "accounts",
-    "outputs": [
+    name: "accounts",
+    outputs: [
       {
-        "internalType": "enum Factory.AccountType",
-        "name": "",
-        "type": "uint8"
+        internalType: "enum Factory.AccountType",
+        name: "",
+        type: "uint8"
       }
     ],
-    "stateMutability": "view",
-    "type": "function"
+    stateMutability: "view",
+    type: "function"
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
+        internalType: "address",
+        name: "",
+        type: "address"
       }
     ],
-    "name": "contracts",
-    "outputs": [
+    name: "contracts",
+    outputs: [
       {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
+        internalType: "address",
+        name: "",
+        type: "address"
       }
     ],
-    "stateMutability": "view",
-    "type": "function"
+    stateMutability: "view",
+    type: "function"
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "address",
-        "name": "_company",
-        "type": "address"
+        internalType: "address",
+        name: "_company",
+        type: "address"
       }
     ],
-    "name": "deployCompanyAccount",
-    "outputs": [
+    name: "deployCompanyAccount",
+    outputs: [
       {
-        "internalType": "address",
-        "name": "_contract",
-        "type": "address"
+        internalType: "address",
+        name: "_contract",
+        type: "address"
       }
     ],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    stateMutability: "nonpayable",
+    type: "function"
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "address",
-        "name": "_customer",
-        "type": "address"
+        internalType: "address",
+        name: "_customer",
+        type: "address"
       }
     ],
-    "name": "deployCustomerAccount",
-    "outputs": [
+    name: "deployCustomerAccount",
+    outputs: [
       {
-        "internalType": "address",
-        "name": "_contract",
-        "type": "address"
+        internalType: "address",
+        name: "_contract",
+        type: "address"
       }
     ],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    stateMutability: "nonpayable",
+    type: "function"
   },
   {
-    "inputs": [],
-    "name": "owner",
-    "outputs": [
+    inputs: [],
+    name: "owner",
+    outputs: [
       {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
+        internalType: "address",
+        name: "",
+        type: "address"
       }
     ],
-    "stateMutability": "view",
-    "type": "function"
+    stateMutability: "view",
+    type: "function"
   },
   {
-    "inputs": [],
-    "name": "renounceOwnership",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    inputs: [],
+    name: "renounceOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function"
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "address",
-        "name": "newOwner",
-        "type": "address"
+        internalType: "address",
+        name: "newOwner",
+        type: "address"
       }
     ],
-    "name": "transferOwnership",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function"
   },
   {
-    "stateMutability": "payable",
-    "type": "receive"
+    stateMutability: "payable",
+    type: "receive"
   }
-]
+];

@@ -84,3 +84,259 @@
 2024-07-13T00:09:50.947 application=indexer fetcher=block_catchup [info] Checking if index needs to catch up in 25000ms.
 2024-07-13T00:09:56.247 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
 2024-07-13T00:09:56.255 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:20:38.964 application=indexer fetcher=block_catchup missing_block_count=0 shrunk=false [info] Index already caught up.
+2024-07-13T00:20:38.964 application=indexer fetcher=block_catchup [info] Checking if index needs to catch up in 5000ms.
+2024-07-13T00:20:43.968 application=indexer fetcher=block_catchup missing_block_count=0 shrunk=false [info] Index already caught up.
+2024-07-13T00:20:43.968 application=indexer fetcher=block_catchup [info] Checking if index needs to catch up in 10000ms.
+2024-07-13T00:20:48.953 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:20:48.966 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:20:53.971 application=indexer fetcher=block_catchup missing_block_count=0 shrunk=false [info] Index already caught up.
+2024-07-13T00:20:53.972 application=indexer fetcher=block_catchup [info] Checking if index needs to catch up in 20000ms.
+2024-07-13T00:20:58.968 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:20:58.980 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:21:08.983 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:21:08.996 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:21:13.979 application=indexer fetcher=block_catchup missing_block_count=0 shrunk=false [info] Index already caught up.
+2024-07-13T00:21:13.979 application=indexer fetcher=block_catchup [info] Checking if index needs to catch up in 25000ms.
+2024-07-13T00:21:19.000 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:21:19.007 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:21:29.008 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:21:29.033 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:21:38.988 application=indexer fetcher=block_catchup missing_block_count=0 shrunk=false [info] Index already caught up.
+2024-07-13T00:21:38.988 application=indexer fetcher=block_catchup [info] Checking if index needs to catch up in 25000ms.
+2024-07-13T00:21:39.035 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:21:39.044 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:21:49.046 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:21:49.060 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:21:59.062 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:21:59.070 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:22:03.990 application=indexer fetcher=block_catchup missing_block_count=0 shrunk=false [info] Index already caught up.
+2024-07-13T00:22:03.991 application=indexer fetcher=block_catchup [info] Checking if index needs to catch up in 25000ms.
+2024-07-13T00:22:09.072 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:22:09.085 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:22:19.086 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:22:19.102 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:22:28.996 application=indexer fetcher=block_catchup missing_block_count=0 shrunk=false [info] Index already caught up.
+2024-07-13T00:22:28.996 application=indexer fetcher=block_catchup [info] Checking if index needs to catch up in 25000ms.
+2024-07-13T00:22:29.104 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:22:29.110 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:22:39.113 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:22:39.121 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:22:49.127 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:22:49.132 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:22:54.004 application=indexer fetcher=block_catchup missing_block_count=0 shrunk=false [info] Index already caught up.
+2024-07-13T00:22:54.004 application=indexer fetcher=block_catchup [info] Checking if index needs to catch up in 25000ms.
+2024-07-13T00:22:59.134 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:22:59.154 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:23:09.157 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:23:09.165 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:23:19.012 application=indexer fetcher=block_catchup missing_block_count=0 shrunk=false [info] Index already caught up.
+2024-07-13T00:23:19.012 application=indexer fetcher=block_catchup [info] Checking if index needs to catch up in 25000ms.
+2024-07-13T00:23:19.167 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:23:19.175 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:23:29.177 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:23:29.191 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:23:39.194 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:23:39.206 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:23:44.017 application=indexer fetcher=block_catchup missing_block_count=0 shrunk=false [info] Index already caught up.
+2024-07-13T00:23:44.017 application=indexer fetcher=block_catchup [info] Checking if index needs to catch up in 25000ms.
+2024-07-13T00:23:49.212 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:23:49.229 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:23:59.233 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:23:59.240 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:24:09.024 application=indexer fetcher=block_catchup missing_block_count=0 shrunk=false [info] Index already caught up.
+2024-07-13T00:24:09.024 application=indexer fetcher=block_catchup [info] Checking if index needs to catch up in 25000ms.
+2024-07-13T00:24:09.244 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:24:09.258 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:24:19.260 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:24:19.265 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:24:29.268 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:24:29.275 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:24:34.031 application=indexer fetcher=block_catchup missing_block_count=0 shrunk=false [info] Index already caught up.
+2024-07-13T00:24:34.031 application=indexer fetcher=block_catchup [info] Checking if index needs to catch up in 25000ms.
+2024-07-13T00:24:39.282 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:24:39.296 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:24:49.299 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:24:49.308 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:24:59.036 application=indexer fetcher=block_catchup missing_block_count=0 shrunk=false [info] Index already caught up.
+2024-07-13T00:24:59.036 application=indexer fetcher=block_catchup [info] Checking if index needs to catch up in 25000ms.
+2024-07-13T00:24:59.309 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:24:59.322 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:25:09.325 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:25:09.336 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:25:19.338 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:25:19.347 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:25:24.043 application=indexer fetcher=block_catchup missing_block_count=0 shrunk=false [info] Index already caught up.
+2024-07-13T00:25:24.043 application=indexer fetcher=block_catchup [info] Checking if index needs to catch up in 25000ms.
+2024-07-13T00:25:29.349 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:25:29.367 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:25:39.368 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:25:39.374 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:25:49.049 application=indexer fetcher=block_catchup missing_block_count=0 shrunk=false [info] Index already caught up.
+2024-07-13T00:25:49.049 application=indexer fetcher=block_catchup [info] Checking if index needs to catch up in 25000ms.
+2024-07-13T00:25:49.376 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:25:49.382 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:25:59.383 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:25:59.393 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:26:09.397 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:26:09.404 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:26:14.060 application=indexer fetcher=block_catchup missing_block_count=0 shrunk=false [info] Index already caught up.
+2024-07-13T00:26:14.060 application=indexer fetcher=block_catchup [info] Checking if index needs to catch up in 25000ms.
+2024-07-13T00:26:19.406 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:26:19.414 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:26:29.415 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:26:29.426 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:26:39.067 application=indexer fetcher=block_catchup missing_block_count=0 shrunk=false [info] Index already caught up.
+2024-07-13T00:26:39.067 application=indexer fetcher=block_catchup [info] Checking if index needs to catch up in 25000ms.
+2024-07-13T00:26:39.427 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:26:39.432 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:26:49.438 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:26:49.446 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:26:59.447 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:26:59.454 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:27:04.075 application=indexer fetcher=block_catchup missing_block_count=0 shrunk=false [info] Index already caught up.
+2024-07-13T00:27:04.075 application=indexer fetcher=block_catchup [info] Checking if index needs to catch up in 25000ms.
+2024-07-13T00:27:09.455 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:27:09.464 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:27:19.466 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:27:19.475 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:27:29.079 application=indexer fetcher=block_catchup missing_block_count=0 shrunk=false [info] Index already caught up.
+2024-07-13T00:27:29.079 application=indexer fetcher=block_catchup [info] Checking if index needs to catch up in 25000ms.
+2024-07-13T00:27:29.478 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:27:29.488 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:27:39.491 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:27:39.499 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:27:49.500 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:27:49.507 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:27:54.088 application=indexer fetcher=block_catchup missing_block_count=0 shrunk=false [info] Index already caught up.
+2024-07-13T00:27:54.088 application=indexer fetcher=block_catchup [info] Checking if index needs to catch up in 25000ms.
+2024-07-13T00:27:59.511 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:27:59.521 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:28:09.523 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:28:09.532 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:28:19.093 application=indexer fetcher=block_catchup missing_block_count=0 shrunk=false [info] Index already caught up.
+2024-07-13T00:28:19.093 application=indexer fetcher=block_catchup [info] Checking if index needs to catch up in 25000ms.
+2024-07-13T00:28:19.534 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:28:19.541 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:28:29.543 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:28:29.551 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:28:39.550 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:28:39.561 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:28:44.098 application=indexer fetcher=block_catchup missing_block_count=0 shrunk=false [info] Index already caught up.
+2024-07-13T00:28:44.098 application=indexer fetcher=block_catchup [info] Checking if index needs to catch up in 25000ms.
+2024-07-13T00:28:49.564 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:28:49.572 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:28:59.574 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:28:59.581 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:29:09.109 application=indexer fetcher=block_catchup missing_block_count=0 shrunk=false [info] Index already caught up.
+2024-07-13T00:29:09.109 application=indexer fetcher=block_catchup [info] Checking if index needs to catch up in 25000ms.
+2024-07-13T00:29:09.587 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:29:09.593 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:29:19.595 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:29:19.602 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:29:29.604 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:29:29.618 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:29:34.116 application=indexer fetcher=block_catchup missing_block_count=0 shrunk=false [info] Index already caught up.
+2024-07-13T00:29:34.116 application=indexer fetcher=block_catchup [info] Checking if index needs to catch up in 25000ms.
+2024-07-13T00:29:39.618 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:29:39.624 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:29:49.625 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:29:49.631 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:29:59.120 application=indexer fetcher=block_catchup missing_block_count=0 shrunk=false [info] Index already caught up.
+2024-07-13T00:29:59.120 application=indexer fetcher=block_catchup [info] Checking if index needs to catch up in 25000ms.
+2024-07-13T00:29:59.634 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:29:59.640 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:30:09.643 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:30:09.650 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:30:19.652 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:30:19.657 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:30:24.127 application=indexer fetcher=block_catchup missing_block_count=0 shrunk=false [info] Index already caught up.
+2024-07-13T00:30:24.127 application=indexer fetcher=block_catchup [info] Checking if index needs to catch up in 25000ms.
+2024-07-13T00:30:29.663 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:30:29.668 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:30:39.671 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:30:39.676 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:30:49.133 application=indexer fetcher=block_catchup missing_block_count=0 shrunk=false [info] Index already caught up.
+2024-07-13T00:30:49.133 application=indexer fetcher=block_catchup [info] Checking if index needs to catch up in 25000ms.
+2024-07-13T00:30:49.676 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:30:49.685 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:30:59.687 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:30:59.693 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:31:09.697 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:31:09.702 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:31:14.138 application=indexer fetcher=block_catchup missing_block_count=0 shrunk=false [info] Index already caught up.
+2024-07-13T00:31:14.138 application=indexer fetcher=block_catchup [info] Checking if index needs to catch up in 25000ms.
+2024-07-13T00:31:19.708 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:31:19.713 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:31:29.716 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:31:29.720 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:31:39.143 application=indexer fetcher=block_catchup missing_block_count=0 shrunk=false [info] Index already caught up.
+2024-07-13T00:31:39.143 application=indexer fetcher=block_catchup [info] Checking if index needs to catch up in 25000ms.
+2024-07-13T00:31:39.723 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:31:39.730 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:31:49.731 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:31:49.737 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:31:59.739 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:31:59.745 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:32:04.150 application=indexer fetcher=block_catchup missing_block_count=0 shrunk=false [info] Index already caught up.
+2024-07-13T00:32:04.150 application=indexer fetcher=block_catchup [info] Checking if index needs to catch up in 25000ms.
+2024-07-13T00:32:09.746 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:32:09.752 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:32:19.758 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:32:19.765 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:32:29.155 application=indexer fetcher=block_catchup missing_block_count=0 shrunk=false [info] Index already caught up.
+2024-07-13T00:32:29.156 application=indexer fetcher=block_catchup [info] Checking if index needs to catch up in 25000ms.
+2024-07-13T00:32:29.767 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:32:29.777 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:32:39.779 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:32:39.785 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:32:49.786 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:32:49.793 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:32:54.159 application=indexer fetcher=block_catchup missing_block_count=0 shrunk=false [info] Index already caught up.
+2024-07-13T00:32:54.159 application=indexer fetcher=block_catchup [info] Checking if index needs to catch up in 25000ms.
+2024-07-13T00:32:59.797 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:32:59.802 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:33:09.806 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:33:09.812 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:33:19.165 application=indexer fetcher=block_catchup missing_block_count=0 shrunk=false [info] Index already caught up.
+2024-07-13T00:33:19.165 application=indexer fetcher=block_catchup [info] Checking if index needs to catch up in 25000ms.
+2024-07-13T00:33:19.819 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:33:19.825 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:33:29.826 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:33:29.832 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:33:39.836 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:33:39.845 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:33:44.175 application=indexer fetcher=block_catchup missing_block_count=0 shrunk=false [info] Index already caught up.
+2024-07-13T00:33:44.175 application=indexer fetcher=block_catchup [info] Checking if index needs to catch up in 25000ms.
+2024-07-13T00:33:49.847 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:33:49.855 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:33:59.860 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:33:59.865 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:34:09.181 application=indexer fetcher=block_catchup missing_block_count=0 shrunk=false [info] Index already caught up.
+2024-07-13T00:34:09.181 application=indexer fetcher=block_catchup [info] Checking if index needs to catch up in 25000ms.
+2024-07-13T00:34:09.870 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:34:09.877 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:34:19.879 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:34:19.885 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:34:29.889 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:34:29.897 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:34:34.192 application=indexer fetcher=block_catchup missing_block_count=0 shrunk=false [info] Index already caught up.
+2024-07-13T00:34:34.192 application=indexer fetcher=block_catchup [info] Checking if index needs to catch up in 25000ms.
+2024-07-13T00:34:39.899 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:34:39.906 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:34:49.911 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:34:49.918 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:34:59.195 application=indexer fetcher=block_catchup missing_block_count=0 shrunk=false [info] Index already caught up.
+2024-07-13T00:34:59.195 application=indexer fetcher=block_catchup [info] Checking if index needs to catch up in 25000ms.
+2024-07-13T00:34:59.922 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:34:59.928 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:35:09.931 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:35:09.940 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:35:19.941 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:35:19.947 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:35:24.199 application=indexer fetcher=block_catchup missing_block_count=0 shrunk=false [info] Index already caught up.
+2024-07-13T00:35:24.199 application=indexer fetcher=block_catchup [info] Checking if index needs to catch up in 25000ms.
+2024-07-13T00:35:29.949 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:35:29.960 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized
+2024-07-13T00:35:39.961 application=indexer fetcher=empty_blocks_to_refetch [info] Start sanitizing of empty blocks. Batch size is 100
+2024-07-13T00:35:39.967 application=indexer fetcher=empty_blocks_to_refetch [info] Batch of empty blocks is sanitized

@@ -8,7 +8,16 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useState } from 'react'
 import useSession from '@/hooks/useSession'
 import { useWriteContract } from 'wagmi'
-
+import { abi } from '@/lib/wagmi/abi'
+import { CONTRACT_ADDRESS } from '@/lib/constants'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
 
 const FormSchema = z.object({
   companyName: z.string().min(1, 'Company name is required'),
@@ -19,9 +28,7 @@ const FormSchema = z.object({
 export default function CompanyForm() {
   const { user, wallet } = useSession()
   const [showPassword, setShowPassword] = useState(false)
-  const { status, data:hash, writeContract } = useWriteContract()
-
-
+  const { status, data: hash, writeContract } = useWriteContract()
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -41,73 +48,92 @@ export default function CompanyForm() {
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     const { companyName, email, password } = data
-    console.log('data from signup company', data)
-  //   writeContract({ 
-  //     abi,
-  //     address: '0x6b175474e89094c44da98b954eedeac495271d0f',
-  //     functionName: 'transferFrom',
-  //     args: [
-  //       '0xd2135CfB216b74109775236E36d4b433F1DF507B',
-  //       '0xA0Cf798816D4b9b9866b5330EEa46a18382f251e',
-  //       123n,
-  //     ],
-  //  })
+    console.log('data', data)
+    //TODO: ADD THE DATA TO THE NEW CONTRACT
+    writeContract({
+      abi,
+      address: CONTRACT_ADDRESS,
+      functionName: 'deployCustomerAccount',
+      args: [wallet],
+    })
   }
+  console.log('status', status)
+  console.log('hash', hash)
 
   return (
-    <form
-      onSubmit={form.handleSubmit(onSubmit)}
-      className='mx-auto grid w-[350px] gap-6'
-      noValidate
-    >
-      <div className='grid gap-2'>
-        <Label htmlFor='name'>Company name</Label>
-        <Input
-          id='name'
-          type='text'
-          placeholder='company name'
-          {...form.register('companyName')}
-          required
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className='mx-auto w-[350px] space-y-4'
+        noValidate
+      >
+        <FormField
+          control={form.control}
+          name='companyName'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Company Name</FormLabel>
+              <FormControl>
+                <Input placeholder='Company Name' {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-      </div>
-      <div className='grid gap-2'>
-        <Label htmlFor='email'>Email</Label>
-        <Input
-          id='email'
-          type='email'
-          placeholder='email@email.com'
-          {...form.register('email')}
-          required
+        <FormField
+          control={form.control}
+          name='email'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input placeholder='email@email.com' {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-      </div>
-      <div className='grid gap-2'>
-        <Label htmlFor='password'>Password</Label>
-        <Input
-          id='password'
-          type={showPassword ? 'text' : 'password'}
-          placeholder='password'
-          {...form.register('password')}
-          required
-          endAdornment={
-            <button
-              onClick={(e) => {
-                e.preventDefault() // Prevent form submission
-                setShowPassword(!showPassword)
-              }}
-              className='outline-none focus:outline-none'
-            >
-              {showPassword ? (
-                <EyeOffIcon className='h-5 w-5 text-gray-500' />
-              ) : (
-                <EyeIcon className='h-5 w-5 text-gray-500' />
-              )}
-            </button>
-          }
+        <FormField
+          control={form.control}
+          name='password'
+          render={({ field }) => (
+            <FormItem>
+              <div className='flex items-center justify-between'>
+                <FormLabel>Password</FormLabel>
+                <button
+                  onClick={(e) => {
+                    e.preventDefault() // Prevent form submission
+                    setShowPassword(!showPassword)
+                  }}
+                  className='outline-none focus:outline-none'
+                >
+                  {showPassword ? (
+                    <EyeOffIcon className='h-5 w-5 text-gray-500' />
+                  ) : (
+                    <EyeIcon className='h-5 w-5 text-gray-500' />
+                  )}
+                </button>
+              </div>
+              <FormControl>
+                <Input
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder='password'
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-      </div>
-      <Button type='submit' className='w-full' disabled={form.formState.isSubmitting}>
-        {form.formState.isSubmitting ? 'Loading...' : 'Submit'}
-      </Button>
-    </form>
+       
+        <Button
+          type='submit'
+          className='w-full'
+          disabled={form.formState.isSubmitting}
+        >
+          {form.formState.isSubmitting ? 'Loading...' : 'Submit'}
+        </Button>
+      </form>
+    </Form>
   )
 }
