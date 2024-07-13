@@ -1,5 +1,7 @@
 # Sample Hardhat Project
 
+**IMPORTANT: to install run npm i --force, as for some reason with the vite package seems to be an incompatibility with peer dependencies.**
+
 This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a Hardhat Ignition module that deploys that contract.
 
 Try running some of the following tasks:
