@@ -24,6 +24,7 @@ contract Factory is Ownable {
 
     mapping(address => AccountType) public accounts;
     mapping(address => address) public contracts;
+    mapping(address => bool) public whitelistedERC20tokens;
 
     constructor() payable Ownable(msg.sender) {}
 
@@ -47,5 +48,17 @@ contract Factory is Ownable {
         contracts[msg.sender] = companyContract;
         emit CompanyAccountCreated(companyContract);
         return companyContract;
+    }
+
+    function whitelistERC20Token(address _token) public onlyOwner {
+        whitelistedERC20tokens[_token] = true;
+    }
+
+    function isERC20TokenWhitelisted(address _token) public view returns (bool) {
+        return whitelistedERC20tokens[_token];
+    }
+
+    function delistERC20Token(address _token) public onlyOwner {
+        whitelistedERC20tokens[_token] = false;
     }
 }

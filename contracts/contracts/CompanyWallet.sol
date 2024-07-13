@@ -1,9 +1,16 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.26;
+pragma solidity 0.8.26;
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 interface ICustomerWallet {
     function payForSubscription(bytes32 _productId) external returns (bool); 
+}
+
+/**
+ * @dev For some reason if the name is the same as in the CustomerWallet.sol it does not work
+ */
+interface IERC20Context {
+    function isERC20TokenWhitelisted(address _token) external view returns (bool);
 }
 
 contract CompanyWallet is Ownable {
