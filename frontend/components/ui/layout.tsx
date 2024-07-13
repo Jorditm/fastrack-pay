@@ -7,7 +7,7 @@ export default function Layout({ sidebar, children }: { sidebar: React.ReactNode
             }
         >
             {sidebar}
-            <div className="max-w-[1200px] mx-auto pl-20 pr-10 py-12 w-full overflow-y-auto min-h-screen max-h-screen">
+            <div className=" mx-auto pl-14 pr-4 py-10 w-full overflow-y-auto min-h-screen max-h-screen">
                 {children}
             </div>
         </main>

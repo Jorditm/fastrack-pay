@@ -198,7 +198,7 @@ export default function Page() {
                     </SheetContent>
                 </Sheet>
             </div>
-            <div className="container mx-auto py-10">
+            <div className='mt-2 w-full'>
                 <DataTable columns={columns} data={[]} />
             </div>
 

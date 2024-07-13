@@ -45,12 +45,13 @@ export default function CompanyForm() {
     null
   )
 
-  const { data, error, isFetching, refetch } = useTransactionReceipt({
+  const { data, refetch } = useTransactionReceipt({
     hash: transactionHash as `0x${string}`
   })
 
   useEffect(() => {
-    if (user) { // TODO: set to proper info requested by the contract for companies --> This is currently OK for end users
+    if (user) { 
+      // TODO: set to proper info requested by the contract for companies --> This is currently OK for end users
       form.setValue('email', user.email)
       form.setValue('companyName', user.name)
     }
@@ -63,7 +64,7 @@ export default function CompanyForm() {
     if (data) {
       const companyAddress = "0x" + data.logs[1].data.slice(-40);
       localStorage.setItem('companyAddress', companyAddress)
-      redirect('/dashboard/products')
+      redirect('/company/products')
     }
   }, [data])
 

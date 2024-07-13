@@ -7,32 +7,44 @@ import { useEffect, useState } from 'react'
 import { EyeIcon, EyeOffIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import useSession from '@/hooks/useSession'
-import { useWriteContract } from 'wagmi'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { useTransactionReceipt, useWriteContract } from 'wagmi'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
 import { abi } from '@/lib/wagmi/abi'
 import { CONTRACT_ADDRESS } from '@/lib/constants'
-import Web3 from 'web3'
 import web3auth from '@/lib/web3auth/provider'
 import { redirect } from 'next/navigation'
+import { CallWithERC2771Request, GelatoRelay, SignerOrProvider } from '@gelatonetwork/relay-sdk'
+import { ethers, Eip1193Provider } from 'ethers'
+import { toast } from '@/components/ui/use-toast'
 
 const FormSchema = z.object({
   name: z.string().min(1, 'Name is required'),
   email: z.string().email('Invalid email address'),
-  password: z.string().min(6, 'Password must be at least 6 characters long'),
 })
 
 export default function PersonForm() {
   const { user, wallet } = useSession()
-  const [showPassword, setShowPassword] = useState(false)
-  const { status, data: hash, writeContract } = useWriteContract()
+  const [loading, setLoading] = useState(false)
+  const [transactionHash, setTransactionHash] = useState<`0x${string}` | null>(
+    null
+  )
 
+  const { data, refetch } = useTransactionReceipt({
+    hash: transactionHash as `0x${string}`,
+  })
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       name: '',
       email: '',
-      password: '',
     },
   })
 
@@ -43,22 +55,69 @@ export default function PersonForm() {
     }
   }, [user])
 
+  useEffect(() => {
+    if (!data) {
+      refetch()
+    }
+    if (data) {
+      const userAddres = '0x' + data.logs[1].data.slice(-40)
+      localStorage.setItem('userAddress', userAddres)
+      redirect('/customer/payments')
+    }
+  }, [data])
+
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-    const { name, email, password } = data
-    //TODO: ADD THE DATA TO THE NEW CONTRACT
-    const web3 = new Web3(web3auth.provider as any)
-    const contract = new web3.eth.Contract(
-      JSON.parse(JSON.stringify(abi)),
-      CONTRACT_ADDRESS
+    setLoading(true)
+    const relay = new GelatoRelay()
+    const { name, email } = data
+
+    const ethersProvider = new ethers.BrowserProvider(
+      web3auth.provider as Eip1193Provider
     )
-    const result = await contract.methods
-      .deployCustomerAccount(['patata', 'banana'])
-      .send({ from: wallet as string })
-      if(result){
-        const companyAccountContract =  "0x" + result?.events?.CompanyAccountCreated.data.slice(-40)
-        localStorage.setItem('companyAccount', companyAccountContract.toString())
-        redirect('/company/products')
+    const signer = await ethersProvider.getSigner()
+    const user = await signer.getAddress()
+    const contract = new ethers.Contract(CONTRACT_ADDRESS, abi, signer)
+
+    const { data: txData } =
+      await contract.deployCustomerAccount.populateTransaction({
+        name: name,
+        email: email,
+      })
+
+      const request: CallWithERC2771Request = {
+        chainId: (await ethersProvider.getNetwork()).chainId,
+        target: CONTRACT_ADDRESS,
+        data: txData,
+        user: user,
       }
+      const GELATO_API_KEY = 'c3KruXJBGkyYZwXLVNbHKVjVrTxbAq1BB0WDxlSw_Sc_'
+  
+      const relayResponse = await relay.sponsoredCallERC2771(
+        request,
+        ethersProvider as unknown as SignerOrProvider,
+        GELATO_API_KEY
+      )
+      const checkStatus = async () => {
+        const status = await relay.getTaskStatus(relayResponse.taskId)
+  
+        if (status?.taskState === 'ExecSuccess') {
+          clearInterval(statusInterval)
+          if (status.transactionHash) {
+            setTransactionHash(status?.transactionHash as `0x${string}`)
+          }
+        }
+        if (status?.taskState === 'Cancelled') {
+          clearInterval(statusInterval)
+          setLoading(false)
+          toast({
+            title: 'Error',
+            description: 'Transaction cancelled',
+            variant: 'destructive',
+          })
+        }
+      }
+      const statusInterval = setInterval(checkStatus, 5000) // Poll every 5 seconds
+
   }
   return (
     <Form {...form}>
@@ -67,7 +126,7 @@ export default function PersonForm() {
         className='mx-auto w-[350px] space-y-4'
         noValidate
       >
-      <FormField
+        <FormField
           control={form.control}
           name='name'
           render={({ field }) => (
@@ -93,41 +152,9 @@ export default function PersonForm() {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name='password'
-          render={({ field }) => (
-            <FormItem>
-              <div className='flex items-center justify-between'>
-                <FormLabel>Password</FormLabel>
-                <button
-                  onClick={(e) => {
-                    e.preventDefault() // Prevent form submission
-                    setShowPassword(!showPassword)
-                  }}
-                  className='outline-none focus:outline-none'
-                >
-                  {showPassword ? (
-                    <EyeOffIcon className='h-5 w-5 text-gray-500' />
-                  ) : (
-                    <EyeIcon className='h-5 w-5 text-gray-500' />
-                  )}
-                </button>
-              </div>
-              <FormControl>
-                <Input
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder='password'
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      <Button type='submit' className='w-full' disabled={form.formState.isSubmitting}>
-        {form.formState.isSubmitting ? 'Loading...' : 'Submit'}
-      </Button>
+        <Button type='submit' className='w-full' disabled={loading}>
+          {loading ? 'Loading...' : 'Submit'}
+        </Button>
       </form>
     </Form>
   )
