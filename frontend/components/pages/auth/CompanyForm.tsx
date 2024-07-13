@@ -89,9 +89,10 @@ export default function CompanyForm() {
 
     const relayResponse = await relay.sponsoredCallERC2771(request, ethersProvider as unknown as SignerOrProvider, GELATO_API_KEY)
 
+    console.log(relayResponse)
 
+    const status = await relay.getTaskStatus("0x58987c65ee61decadf4b5ec11ef78ab918b1edb3241c6853db356347b2d463f1")
 
-    const status = await relay.getTaskStatus(relayResponse.taskId)
 
     console.log(status);
 
