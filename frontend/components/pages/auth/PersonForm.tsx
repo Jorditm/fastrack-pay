@@ -1,90 +1,134 @@
-import { useForm } from "react-hook-form";
-import { Input } from "@/components/ui/CustomInput";
-import { Label } from "@/components/ui/label";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
-import { EyeIcon, EyeOffIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useForm } from 'react-hook-form'
+import { Input } from '@/components/ui/CustomInput'
+import { Label } from '@/components/ui/label'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useEffect, useState } from 'react'
+import { EyeIcon, EyeOffIcon } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import useSession from '@/hooks/useSession'
+import { useWriteContract } from 'wagmi'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { abi } from '@/lib/wagmi/abi'
+import { CONTRACT_ADDRESS } from '@/lib/constants'
+import Web3 from 'web3'
+import web3auth from '@/lib/web3auth/provider'
+import { redirect } from 'next/navigation'
 
 const FormSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters long"),
-});
+  name: z.string().min(1, 'Name is required'),
+  email: z.string().email('Invalid email address'),
+  password: z.string().min(6, 'Password must be at least 6 characters long'),
+})
 
 export default function PersonForm() {
-  const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const { user, wallet } = useSession()
+  const [showPassword, setShowPassword] = useState(false)
+  const { status, data: hash, writeContract } = useWriteContract()
+
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      name: "",
-      email: "",
-      password: "",
+      name: '',
+      email: '',
+      password: '',
     },
-  });
+  })
+
+  useEffect(() => {
+    if (user) {
+      form.setValue('email', user.email)
+      form.setValue('name', user.name)
+    }
+  }, [user])
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-    setLoading(true); // Set loading to true when the request starts
-    const { name, email, password } = data;
-    console.warn("data from signup company", data);
-  };
+    const { name, email, password } = data
+    //TODO: ADD THE DATA TO THE NEW CONTRACT
+    const web3 = new Web3(web3auth.provider as any)
+    const contract = new web3.eth.Contract(
+      JSON.parse(JSON.stringify(abi)),
+      CONTRACT_ADDRESS
+    )
+    const result = await contract.methods
+      .deployCustomerAccount(['patata', 'banana'])
+      .send({ from: wallet as string })
+      if(result){
+        const companyAccountContract =  "0x" + result?.events?.CompanyAccountCreated.data.slice(-40)
+        localStorage.setItem('companyAccount', companyAccountContract.toString())
+        redirect('/company/products')
+      }
+  }
   return (
-    <form
-      onSubmit={form.handleSubmit(onSubmit)}
-      className="mx-auto grid w-[350px] gap-6"
-      noValidate
-    >
-      <div className="grid gap-2">
-        <Label htmlFor="name">Name</Label>
-        <Input
-          id="name"
-          type="text"
-          placeholder="name"
-          {...form.register("name")}
-          required
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className='mx-auto w-[350px] space-y-4'
+        noValidate
+      >
+      <FormField
+          control={form.control}
+          name='name'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Name</FormLabel>
+              <FormControl>
+                <Input placeholder='Name' {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-      </div>
-      <div className="grid gap-2">
-        <Label htmlFor="email">Email</Label>
-        <Input
-          id="email"
-          type="email"
-          placeholder="email@email.com"
-          {...form.register("email")}
-          required
+        <FormField
+          control={form.control}
+          name='email'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input placeholder='email@email.com' {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-      </div>
-      <div className="grid gap-2">
-        <Label htmlFor="password">Password</Label>
-        <Input
-          id="password"
-          type={showPassword ? "text" : "password"}
-          placeholder="password"
-          {...form.register("password")}
-          required
-          endAdornment={
-            <button
-              onClick={(e) => {
-                e.preventDefault(); // Prevent form submission
-                setShowPassword(!showPassword);
-              }}
-              className="outline-none focus:outline-none"
-            >
-              {showPassword ? (
-                <EyeOffIcon className="h-5 w-5 text-gray-500" />
-              ) : (
-                <EyeIcon className="h-5 w-5 text-gray-500" />
-              )}
-            </button>
-          }
+        <FormField
+          control={form.control}
+          name='password'
+          render={({ field }) => (
+            <FormItem>
+              <div className='flex items-center justify-between'>
+                <FormLabel>Password</FormLabel>
+                <button
+                  onClick={(e) => {
+                    e.preventDefault() // Prevent form submission
+                    setShowPassword(!showPassword)
+                  }}
+                  className='outline-none focus:outline-none'
+                >
+                  {showPassword ? (
+                    <EyeOffIcon className='h-5 w-5 text-gray-500' />
+                  ) : (
+                    <EyeIcon className='h-5 w-5 text-gray-500' />
+                  )}
+                </button>
+              </div>
+              <FormControl>
+                <Input
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder='password'
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-      </div>
-      <Button type="submit" className="w-full" disabled={loading}>
-        {loading ? "Loading..." : "Submit"}
+      <Button type='submit' className='w-full' disabled={form.formState.isSubmitting}>
+        {form.formState.isSubmitting ? 'Loading...' : 'Submit'}
       </Button>
-    </form>
-  );
+      </form>
+    </Form>
+  )
 }
