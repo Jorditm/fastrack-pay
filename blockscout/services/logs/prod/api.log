@@ -1,6 +1,0 @@
-2024-07-13T00:05:05.863 application=api [debug] Current global API rate limit 50 reqs/sec
-2024-07-13T00:05:05.863 application=api [debug] Current API rate limit by key 50 reqs/sec
-2024-07-13T00:05:05.863 application=api [debug] Current API rate limit by IP 3000 reqs/sec
-2024-07-13T00:20:38.930 application=api [debug] Current global API rate limit 50 reqs/sec
-2024-07-13T00:20:38.930 application=api [debug] Current API rate limit by key 50 reqs/sec
-2024-07-13T00:20:38.930 application=api [debug] Current API rate limit by IP 3000 reqs/sec
