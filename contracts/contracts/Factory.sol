@@ -12,6 +12,16 @@ contract Factory is Ownable {
         COMPANY
     }
 
+    struct UserAccountData {
+        string name;
+        string email;
+    }
+
+    struct CompanyAccountData {
+        string name;
+        string logoUrl;   
+    }
+
     mapping(address => AccountType) public accounts;
     mapping(address => address) public contracts;
 
@@ -23,18 +33,18 @@ contract Factory is Ownable {
     fallback() external payable {}
     receive() external payable {}
 
-    function deployCustomerAccount(address _customer) public returns (address _contract) {
-        address customerContract = address(new CustomerWallet(_customer));
-        accounts[_customer] = AccountType.CUSTOMER;
-        contracts[_customer] = customerContract;
+    function deployCustomerAccount(UserAccountData memory _data) public returns (address _contract) {
+        address customerContract = address(new CustomerWallet(msg.sender, _data.name, _data.email));
+        accounts[msg.sender] = AccountType.CUSTOMER;
+        contracts[msg.sender] = customerContract;
         emit CustomerAccountCreated(customerContract);
         return customerContract;
     }
 
-    function deployCompanyAccount(address _company) public returns (address _contract) {
-        address companyContract = address(new CompanyWallet(_company));
-        accounts[_company] = AccountType.COMPANY;
-        contracts[_company] = companyContract;
+    function deployCompanyAccount(CompanyAccountData memory _data) public returns (address _contract) {
+        address companyContract = address(new CompanyWallet(msg.sender, _data.name, _data.logoUrl));
+        accounts[msg.sender] = AccountType.COMPANY;
+        contracts[msg.sender] = companyContract;
         emit CompanyAccountCreated(companyContract);
         return companyContract;
     }

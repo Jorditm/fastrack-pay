@@ -19,6 +19,11 @@ contract CompanyWallet is Ownable {
     event CustomerUnsubscribed(address customer, bytes32 productId);
     event CustomerCharged(address customer, bytes32 productId);
 
+    struct CompanyAccountData {
+        string name;
+        string logoUrl;   
+    }
+
     struct ProductInfo {
         uint256 price;
         bool available;
@@ -42,6 +47,9 @@ contract CompanyWallet is Ownable {
         bytes32 productId;
     }
 
+    string public name;
+    string public logoUrl;
+
     bytes32[] public productIds;
     address[] public clientsList;
     mapping(bytes32 => ProductInfo) public productsInfo;
@@ -50,8 +58,13 @@ contract CompanyWallet is Ownable {
 
 
     constructor(
-        address _owner
-    ) Ownable(_owner) {}
+        address _owner,
+        string memory _name,
+        string memory _logoUrl
+    ) Ownable(_owner) {
+        name = _name;
+        logoUrl = _logoUrl;
+    }
 
     function deposit() public payable onlyOwner {
         emit Deposit(msg.value);
@@ -62,6 +75,15 @@ contract CompanyWallet is Ownable {
         (bool sent, ) = owner().call{value: _amount}("");
         require(sent, "Failed to withdraw");
         emit Withdrawal(address(this).balance);    
+    }
+
+    function updateCompanyData(CompanyAccountData memory _data) public onlyOwner {
+        if(bytes(_data.name).length > 0) {
+            name = _data.name;
+        }
+        if(bytes(_data.logoUrl).length > 0) {
+            logoUrl = _data.logoUrl;
+        }
     }
 
     function createProduct(ProductInfo memory _product) public onlyOwner {

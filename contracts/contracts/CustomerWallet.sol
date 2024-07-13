@@ -17,6 +17,7 @@ interface ICompanyWallet {
 }
 
 contract CustomerWallet is Ownable {
+
     event Deposit(uint256 amount);
     event Withdrawal(uint256 amount);
     event OneTimePayment(address indexed company, uint256 amount);
@@ -25,12 +26,26 @@ contract CustomerWallet is Ownable {
     event SubscriptionReactivated(address indexed company, bytes32 productId);
     event SubscriptionPaid(address indexed company, uint256 amount);
 
+    struct UserAccountData {
+        string name;
+        string email;
+    }
+
+    /** 
+     * @dev This data MUST be encrypted on client side or otherwise it can be accessed by anyone
+     */
+    string public name;
+    string public email;
+
     /**
      * @dev Mapping of company addresses to the corresponding array of subscripitions an user has with that company
      */
     mapping(address => bytes32[]) public subscriptions;
 
-    constructor(address _owner) Ownable(_owner) {}
+    constructor(address _owner, string memory _name, string memory _email) Ownable(_owner) {
+        name = _name;
+        email = _email;
+    }
 
     function deposit() public payable onlyOwner {
         emit Deposit(msg.value);
@@ -41,6 +56,15 @@ contract CustomerWallet is Ownable {
         (bool sent, ) = owner().call{value: _amount}("");
         require(sent, "Failed to withdraw");
         emit Withdrawal(address(this).balance);
+    }
+
+    function updateUserData(UserAccountData memory _data) public onlyOwner {
+        if(bytes(_data.name).length > 0) {
+            name = _data.name;
+        }
+        if(bytes(_data.email).length > 0) {
+            email = _data.email;
+        }
     }
 
     function makeOneTimePayment(
