@@ -24,6 +24,13 @@ By logging into FastrackPay - using [Web3Auth](https://web3auth.io/) to enable f
 
 When logged in, companies can create products (both single payment or subscriptions) that are stored on chain and used afterwards in order to generate the hosted checkout page where users can pay. They can also see their customers (including provided private information such as name and email, encrypted on chain and only available in plaintext through FastrackPay) and payments history. 
 
+## Deployments
+
+Our contract has been deployed in the following chains:
+
+- Sepolia: [0x264B938d79B863493173C98Aa461a3486FFD3797](https://eth-sepolia.blockscout.com/address/0x264B938d79B863493173C98Aa461a3486FFD3797)
+- Arbitrum: [0xe6212d3516B0040B3f4824641902458B7F1Cb8F9](https://sepolia-explorer.arbitrum.io/address/0xe6212d3516B0040B3f4824641902458B7F1Cb8F9)
+
 ### For users
 
 The experience is similar to PayPal: our solution can be implemented by companies in their pages - e-commerce, SaaS, etc. -, users must create an account the first time and fund it (either with native or pre-approved ERC20 tokens) 
