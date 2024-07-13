@@ -2,6 +2,10 @@
 pragma solidity ^0.8.26;
 import "@openzeppelin/contracts/access/Ownable.sol";
 
+interface ICustomerWallet {
+    function payForSubscription(bytes32 _productId) external returns (bool); 
+}
+
 contract CompanyWallet is Ownable {
 
     event Deposit(uint256 amount);
@@ -39,9 +43,10 @@ contract CompanyWallet is Ownable {
     }
 
     bytes32[] public productIds;
+    address[] public clientsList;
     mapping(bytes32 => ProductInfo) public productsInfo;
     mapping(address => bytes32[]) public customerSubscriptions;
-    mapping(address => mapping(bytes32 => CustomerSubscriptionInfo)) public customerSubscriptionsStatus;
+    mapping(address => mapping(bytes32 => CustomerSubscriptionInfo)) public CustomerSubscriptionsInfos;
 
 
     constructor(
@@ -94,45 +99,45 @@ contract CompanyWallet is Ownable {
         return productsInfo[_productId].price;
     }
 
-    function addPayment(address _customer, bytes32 _productId) payable external {
+    function addPayment(bytes32 _productId) payable external {
         require(productsInfo[_productId].available, "Product is not available");
         require(msg.value == productsInfo[_productId].price, "Invalid payment amount");
-        emit PaymentReceived(_customer, productsInfo[_productId].price);
+        emit PaymentReceived(msg.sender, productsInfo[_productId].price);
     }
 
-    function addSubscription(address _customer, bytes32 _productId) payable external {
+    function addSubscription(bytes32 _productId) payable external {
         require(productsInfo[_productId].available, "Product is not available");
         require(productsInfo[_productId].recurring, "Product is not recurring");
         require(msg.value == productsInfo[_productId].price, "Invalid payment amount");
-        require(customerSubscriptionsStatus[_customer][_productId].isActive == false, "Subscription is already active");
-        customerSubscriptions[_customer].push(_productId);
+        require(CustomerSubscriptionsInfos[msg.sender][_productId].isActive == false, "Subscription is already active");
+        customerSubscriptions[msg.sender].push(_productId);
         CustomerSubscriptionInfo memory subscription = CustomerSubscriptionInfo({
-            customer: _customer,
+            customer: msg.sender,
             productId: _productId,
             lastPayment: block.timestamp,
             nextPayment: block.timestamp + productsInfo[_productId].interval,
             isActive: true
         });
-        customerSubscriptionsStatus[_customer][_productId] = subscription;
-        emit CustomerSubscribed(_customer, _productId);
+        CustomerSubscriptionsInfos[msg.sender][_productId] = subscription;
+        emit CustomerSubscribed(msg.sender, _productId);
     }
 
-    function cancelSubscription(address _customer, bytes32 _productId) external {
-        customerSubscriptionsStatus[_customer][_productId].isActive = false;
-        emit CustomerUnsubscribed(_customer, _productId);
+    function cancelSubscription(bytes32 _productId) external {
+        CustomerSubscriptionsInfos[msg.sender][_productId].isActive = false;
+        emit CustomerUnsubscribed(msg.sender, _productId);
     }
 
-    function reactivateSubscription(address _customer, bytes32 _productId) external payable {
+    function reactivateSubscription(bytes32 _productId) external payable {
         require(productsInfo[_productId].available, "Product is not available");
         require(productsInfo[_productId].recurring, "Product is not recurring");
-        require(!customerSubscriptionsStatus[_customer][_productId].isActive, "Subscription is already active");
-        customerSubscriptionsStatus[_customer][_productId].isActive = true;
-        customerSubscriptionsStatus[_customer][_productId].lastPayment = block.timestamp;
-        customerSubscriptionsStatus[_customer][_productId].nextPayment = block.timestamp + productsInfo[_productId].interval;
-        emit CustomerSubscribed(_customer, _productId);
+        require(!CustomerSubscriptionsInfos[msg.sender][_productId].isActive, "Subscription is already active");
+        CustomerSubscriptionsInfos[msg.sender][_productId].isActive = true;
+        CustomerSubscriptionsInfos[msg.sender][_productId].lastPayment = block.timestamp;
+        CustomerSubscriptionsInfos[msg.sender][_productId].nextPayment = block.timestamp + productsInfo[_productId].interval;
+        emit CustomerSubscribed(msg.sender, _productId);
     }
 
-    function getCustomerSubscriptions(address _customer) external view returns (bytes32[] memory) {
+    function getCustomerSubscriptions(address _customer) internal view returns (bytes32[] memory) {
         bytes32[] memory subscriptions = new bytes32[](customerSubscriptions[_customer].length);
         for (uint i = 0; i < customerSubscriptions[_customer].length; i++) {
             subscriptions[i] = customerSubscriptions[_customer][i];
@@ -140,7 +145,30 @@ contract CompanyWallet is Ownable {
         return subscriptions;
     }
 
-    function getCustomerSubscriptionStatus(address _customer, bytes32 _productId) external view returns (CustomerSubscriptionInfo memory) {
-        return customerSubscriptionsStatus[_customer][_productId];
+    function getCustomerSubscriptionInfo(address _customer, bytes32 _productId) internal view returns (CustomerSubscriptionInfo memory) {
+        return CustomerSubscriptionsInfos[_customer][_productId];
+    }
+
+    function getCustomerSubscriptionStatus(address _customer, bytes32 _productId) public view returns (bool) {
+        return CustomerSubscriptionsInfos[_customer][_productId].isActive;
+    }
+
+    function getCustomerSubscriptionNextPayment(address _customer, bytes32 _productId) internal view returns (uint256) {
+        return CustomerSubscriptionsInfos[_customer][_productId].nextPayment;
+    }
+
+    function retrievePayments() public onlyOwner {
+        for (uint i = 0; i < clientsList.length; i++) {
+            address customer = clientsList[i];
+            bytes32[] memory subscriptions = getCustomerSubscriptions(customer);
+            for (uint j = 0; j < subscriptions.length; j++) {
+                bytes32 productId = subscriptions[j];
+                uint256 nextPayment = getCustomerSubscriptionNextPayment(customer, productId);
+                bool isActive = getCustomerSubscriptionStatus(customer, productId);
+                if (nextPayment <= block.timestamp && isActive) {
+                    ICustomerWallet(customer).payForSubscription(productId);
+                }
+            }
+        }
     }
 }

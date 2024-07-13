@@ -7,15 +7,13 @@ interface ICompanyWallet {
     function getProductPrice(
         bytes32 _productId
     ) external view returns (uint256);
-    function addSubscription(
+    function addSubscription(bytes32 _productId) external payable;
+    function cancelSubscription(bytes32 _productId) external;
+    function reactivateSubscription(bytes32 _productId) external payable;
+    function getCustomerSubscriptionStatus(
         address _customer,
         bytes32 _productId
-    ) external payable;
-    function cancelSubscription(address _customer, bytes32 _productId) external;
-    function reactivateSubscription(
-        address _customer,
-        bytes32 _productId
-    ) external payable;
+    ) external view returns (bool);
 }
 
 contract CustomerWallet is Ownable {
@@ -25,6 +23,12 @@ contract CustomerWallet is Ownable {
     event SubscriptionAdded(address indexed company, bytes32 productId);
     event SubscriptionCancelled(address indexed company, bytes32 productId);
     event SubscriptionReactivated(address indexed company, bytes32 productId);
+    event SubscriptionPaid(address indexed company, uint256 amount);
+
+    /**
+     * @dev Mapping of company addresses to the corresponding array of subscripitions an user has with that company
+     */
+    mapping(address => bytes32[]) public subscriptions;
 
     constructor(address _owner) Ownable(_owner) {}
 
@@ -75,7 +79,6 @@ contract CustomerWallet is Ownable {
 
         try
             ICompanyWallet(_companyContract).addSubscription{value: price}(
-                address(this),
                 _productId
             )
         {
@@ -89,12 +92,7 @@ contract CustomerWallet is Ownable {
         address _companyContract,
         bytes32 _productId
     ) public onlyOwner {
-        try
-            ICompanyWallet(_companyContract).cancelSubscription(
-                address(this),
-                _productId
-            )
-        {
+        try ICompanyWallet(_companyContract).cancelSubscription(_productId) {
             emit SubscriptionCancelled(_companyContract, _productId);
         } catch {
             revert("Failed to cancel subscription");
@@ -115,11 +113,31 @@ contract CustomerWallet is Ownable {
         try
             ICompanyWallet(_companyContract).reactivateSubscription{
                 value: price
-            }(address(this), _productId)
+            }(_productId)
         {
             emit SubscriptionReactivated(_companyContract, _productId);
         } catch {
             revert("Failed to reactivate subscription");
+        }
+    }
+
+    function payForSubscription(bytes32 _productId) external returns (bool) {
+        bool isActive = ICompanyWallet(msg.sender)
+            .getCustomerSubscriptionStatus(address(this), _productId);
+        uint256 price = ICompanyWallet(msg.sender).getProductPrice(_productId);
+        require(isActive, "Subscription is not active");
+        require(price > 0, "Failed to retrieve price");
+        require(address(this).balance >= price, "Insufficient balance");
+        try
+            ICompanyWallet(msg.sender).addPayment{value: price}(
+                address(this),
+                _productId
+            )
+        {
+            emit SubscriptionPaid(msg.sender, price);
+            return true;
+        } catch {
+            revert("Failed to pay for subscription");
         }
     }
 }
