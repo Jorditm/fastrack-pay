@@ -2,12 +2,17 @@
 pragma solidity 0.8.26;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import {ERC2771Context} from "@gelatonetwork/relay-context/contracts/vendor/ERC2771Context.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 interface ICompanyWallet {
     function addPayment(address _customer, bytes32 _productId) external payable;
     function getProductPrice(
         bytes32 _productId
     ) external view returns (uint256);
+    function addERC20Payment(
+        bytes32 _productId,
+        address _token
+    ) external payable;
     function addSubscription(bytes32 _productId) external payable;
     function cancelSubscription(bytes32 _productId) external;
     function reactivateSubscription(bytes32 _productId) external payable;
@@ -29,7 +34,17 @@ interface IFactory {
 contract CustomerWallet is Ownable, ERC2771Context {
     event Deposit(uint256 amount);
     event Withdrawal(uint256 amount);
-    event OneTimePayment(address indexed company, uint256 amount);
+    event OneTimePayment(
+        address indexed company,
+        bytes32 productId,
+        uint256 amount
+    );
+    event OneTimeERC20Payment(
+        address indexed company,
+        bytes32 productId,
+        address token,
+        uint256 amount
+    );
     event SubscriptionAdded(address indexed company, bytes32 productId);
     event SubscriptionCancelled(address indexed company, bytes32 productId);
     event SubscriptionReactivated(address indexed company, bytes32 productId);
@@ -116,9 +131,47 @@ contract CustomerWallet is Ownable, ERC2771Context {
                 _productId
             )
         {
-            emit OneTimePayment(_companyContract, price);
+            emit OneTimePayment(_companyContract, _productId, price);
         } catch {
             revert("Failed to make one time payment");
+        }
+    }
+
+    function makeOneTimeERC20Payment(
+        address _factory,
+        address _token,
+        address _companyContract,
+        bytes32 _productId
+    ) public onlyOwner {
+        require(
+            IFactory(_factory).isERC20TokenWhitelisted(_token),
+            "Token is not whitelisted"
+        );
+        uint256 balance = IERC20(_token).balanceOf(address(this));
+        require(balance > 0, "No balance to transfer");
+        uint256 price = ICompanyWallet(_companyContract).getProductPrice(
+            _productId
+        );
+        require(price > 0, "Failed to retrieve price");
+        require(address(this).balance >= price, "Insufficient balance");
+        try IERC20(_token).transfer(address(this), balance) {
+            try
+                ICompanyWallet(_companyContract).addERC20Payment(
+                    _productId,
+                    _token
+                )
+            {
+                emit OneTimeERC20Payment(
+                    _companyContract,
+                    _productId,
+                    _token,
+                    balance
+                );
+            } catch {
+                revert("Failed to register one time ERC20 payment");
+            }
+        } catch {
+            revert("Failed to transfer token");
         }
     }
 

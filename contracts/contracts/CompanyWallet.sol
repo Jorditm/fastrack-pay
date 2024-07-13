@@ -2,6 +2,7 @@
 pragma solidity 0.8.26;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import {ERC2771Context} from "@gelatonetwork/relay-context/contracts/vendor/ERC2771Context.sol";
+import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 interface ICustomerWallet {
     function payForSubscription(bytes32 _productId) external returns (bool); 
@@ -22,7 +23,8 @@ contract CompanyWallet is Ownable, ERC2771Context {
     event ProductUpdated(bytes32 productId, ProductInfo product);
     event ProductDisabled(bytes32 productId);
     event ProductEnabled(bytes32 productId);
-    event PaymentReceived(address customer, uint256 amount);
+    event ERC20PaymentReceived(address customer, uint256 amount, bytes32 productId, address token);
+    event PaymentReceived(address customer, uint256 amount, bytes32 productId);
     event CustomerSubscribed(address customer, bytes32 productId);
     event CustomerUnsubscribed(address customer, bytes32 productId);
     event CustomerCharged(address customer, bytes32 productId);
@@ -140,7 +142,13 @@ contract CompanyWallet is Ownable, ERC2771Context {
     function addPayment(bytes32 _productId) payable external {
         require(productsInfo[_productId].available, "Product is not available");
         require(msg.value == productsInfo[_productId].price, "Invalid payment amount");
-        emit PaymentReceived(msg.sender, productsInfo[_productId].price);
+        emit PaymentReceived(msg.sender, productsInfo[_productId].price, _productId);
+    }
+
+    function addERC20Payment(bytes32 _productId, address _token) payable external {
+        require(productsInfo[_productId].available, "Product is not available");
+        require(msg.value == productsInfo[_productId].price, "Invalid payment amount");
+        emit ERC20PaymentReceived(msg.sender, productsInfo[_productId].price, _productId, _token);
     }
 
     function addSubscription(bytes32 _productId) payable external {
