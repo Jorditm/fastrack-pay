@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useState } from 'react'
 import useSession from '@/hooks/useSession'
-import { useWriteContract } from 'wagmi'
+import { useConfig, useWriteContract } from 'wagmi'
 import { abi } from '@/lib/wagmi/abi'
 import { CONTRACT_ADDRESS } from '@/lib/constants'
 import {
@@ -18,6 +18,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
+import { waitForTransactionReceipt } from '@wagmi/core'
 
 const FormSchema = z.object({
   companyName: z.string().min(1, 'Company name is required'),
@@ -28,7 +29,7 @@ const FormSchema = z.object({
 export default function CompanyForm() {
   const { user, wallet } = useSession()
   const [showPassword, setShowPassword] = useState(false)
-  const { status, data: hash, writeContract } = useWriteContract()
+  const { status, data: hash, isPending, writeContractAsync } = useWriteContract()
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -46,20 +47,36 @@ export default function CompanyForm() {
     }
   }, [user])
 
+  const config = useConfig()
+  const handleTransactionSubmitted = async (txHash: string) => {
+    const transactionReceipt = await waitForTransactionReceipt(config, {
+      hash: txHash as `0x${string}`,
+    });
+
+    // at this point the tx was mined
+
+    if (transactionReceipt.status === "success") {
+      // execute your logic here
+    }
+  };
+  
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     const { companyName, email, password } = data
     console.log('data', data)
     //TODO: ADD THE DATA TO THE NEW CONTRACT
-    writeContract({
+    writeContractAsync({
       abi,
       address: CONTRACT_ADDRESS,
       functionName: 'deployCompanyAccount',
       args: [wallet],
+    }, 
+    {
+      onSuccess: handleTransactionSubmitted,
+      onError: (error: any) => {
+        console.error('error', error)
+      },
     })
   }
-  console.log('status', status)
-  console.log('hash', hash)
-
   return (
     <Form {...form}>
       <form
