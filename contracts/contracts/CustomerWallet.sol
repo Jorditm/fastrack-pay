@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.26;
+pragma solidity 0.8.26;
 import "@openzeppelin/contracts/access/Ownable.sol";
+import {ERC2771Context} from "@gelatonetwork/relay-context/contracts/vendor/ERC2771Context.sol";
 
 interface ICompanyWallet {
     function addPayment(address _customer, bytes32 _productId) external payable;
@@ -16,7 +17,16 @@ interface ICompanyWallet {
     ) external view returns (bool);
 }
 
-contract CustomerWallet is Ownable {
+/**
+ * @dev For some reason if the name is the same as in the CompanyWallet.sol it does not work
+ */
+interface IFactory {
+    function isERC20TokenWhitelisted(
+        address _token
+    ) external view returns (bool);
+}
+
+contract CustomerWallet is Ownable, ERC2771Context {
     event Deposit(uint256 amount);
     event Withdrawal(uint256 amount);
     event OneTimePayment(address indexed company, uint256 amount);
@@ -25,12 +35,49 @@ contract CustomerWallet is Ownable {
     event SubscriptionReactivated(address indexed company, bytes32 productId);
     event SubscriptionPaid(address indexed company, uint256 amount);
 
+    struct UserAccountData {
+        string name;
+        string email;
+    }
+
+    /**
+     * @dev This data MUST be encrypted on client side or otherwise it can be accessed by anyone
+     */
+    string public name;
+    string public email;
+
     /**
      * @dev Mapping of company addresses to the corresponding array of subscripitions an user has with that company
      */
     mapping(address => bytes32[]) public subscriptions;
 
-    constructor(address _owner) Ownable(_owner) {}
+    constructor(
+        address _owner,
+        address trustedForwarder,
+        string memory _name,
+        string memory _email
+    ) Ownable(_owner) ERC2771Context(trustedForwarder) {
+        name = _name;
+        email = _email;
+    }
+
+    function _msgSender()
+        internal
+        view
+        override(Context, ERC2771Context)
+        returns (address)
+    {
+        return ERC2771Context._msgSender();
+    }
+
+    function _msgData()
+        internal
+        view
+        override(Context, ERC2771Context)
+        returns (bytes calldata)
+    {
+        return ERC2771Context._msgData();
+    }
 
     function deposit() public payable onlyOwner {
         emit Deposit(msg.value);
@@ -41,6 +88,15 @@ contract CustomerWallet is Ownable {
         (bool sent, ) = owner().call{value: _amount}("");
         require(sent, "Failed to withdraw");
         emit Withdrawal(address(this).balance);
+    }
+
+    function updateUserData(UserAccountData memory _data) public onlyOwner {
+        if (bytes(_data.name).length > 0) {
+            name = _data.name;
+        }
+        if (bytes(_data.email).length > 0) {
+            email = _data.email;
+        }
     }
 
     function makeOneTimePayment(
