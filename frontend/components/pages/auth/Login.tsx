@@ -8,33 +8,13 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { redirect, useRouter } from "next/navigation";
 import Web3 from "web3";
+import { clientId, privateKeyProvider } from "@/lib/web3auth/web3AuthProviderProps";
+import web3auth from "@/lib/web3auth/provider";
+import useWeb3AuthCustomProvider from "@/hooks/useWeb3Auth";
 
-
-const clientId = 'BFtxK4txAeTLZhP4YtL2dLqfS2oq3IaTXtLbljuXiIziRPWtkopbkgEwzo9Odyel7u-WB3E2dFqmc8AoRs2G1N4'
-
-const chainConfig = {
-    chainNamespace: CHAIN_NAMESPACES.EIP155,
-    chainId: "0x1", // Please use 0x1 for Mainnet
-    rpcTarget: "https://rpc.ankr.com/eth",
-    displayName: "Scroll",
-    blockExplorerUrl: "https://eth.blockscout.com/",
-    ticker: "SCRL",
-    tickerName: "SCROLL",
-};
-
-const privateKeyProvider = new EthereumPrivateKeyProvider({
-    config: { chainConfig },
-});
-
-const web3auth = new Web3Auth({
-    clientId,
-    web3AuthNetwork: WEB3AUTH_NETWORK.SAPPHIRE_DEVNET,
-    privateKeyProvider,
-});
 
 export default function Login() {
-    const [provider, setProvider] = useState<IProvider | null>(null);
-    const [loggedIn, setLoggedIn] = useState(false);
+    const { provider, setProvider, loggedIn, setLoggedIn } = useWeb3AuthCustomProvider();
     const [user, setUser] = useState<any>(null)
     const [wallets, setWallets] = useState([])
     const router = useRouter()
@@ -51,7 +31,6 @@ export default function Login() {
                 console.error(error);
             }
         };
-
         init();
     }, []);
 
@@ -92,7 +71,7 @@ export default function Login() {
 
     const getAccounts = async () => {
         if (!provider) {
-            console.log("provider not initialized yet");
+            console.error("provider not initialized yet");
             return
         }
         const web3 = new Web3(provider as any);

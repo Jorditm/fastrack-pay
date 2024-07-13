@@ -19,6 +19,10 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { waitForTransactionReceipt } from '@wagmi/core'
+import useWeb3AuthCustomProvider from '@/hooks/useWeb3Auth'
+import web3auth from '@/lib/web3auth/provider'
+import { Web3 } from 'web3'
+import { Result } from 'postcss'
 
 const FormSchema = z.object({
   companyName: z.string().min(1, 'Company name is required'),
@@ -28,8 +32,8 @@ const FormSchema = z.object({
 
 export default function CompanyForm() {
   const { user, wallet } = useSession()
+  const { setProvider, setLoggedIn } = useWeb3AuthCustomProvider()
   const [showPassword, setShowPassword] = useState(false)
-  const { status, data: hash, isPending, writeContractAsync } = useWriteContract()
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -48,34 +52,27 @@ export default function CompanyForm() {
   }, [user])
 
   const config = useConfig()
-  const handleTransactionSubmitted = async (txHash: string) => {
-    const transactionReceipt = await waitForTransactionReceipt(config, {
-      hash: txHash as `0x${string}`,
-    });
 
-    // at this point the tx was mined
-
-    if (transactionReceipt.status === "success") {
-      // execute your logic here
-    }
-  };
-  
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     const { companyName, email, password } = data
     console.log('data', data)
     //TODO: ADD THE DATA TO THE NEW CONTRACT
-    writeContractAsync({
-      abi,
-      address: CONTRACT_ADDRESS,
-      functionName: 'deployCompanyAccount',
-      args: [wallet],
-    }, 
-    {
-      onSuccess: handleTransactionSubmitted,
-      onError: (error: any) => {
-        console.error('error', error)
-      },
-    })
+    const web3 = new Web3(web3auth.provider as any)
+    // const receipt = await web3.eth.signTransaction({
+    //   from: wallet as string,
+    //   to: CONTRACT_ADDRESS,
+    //   value: amount,
+    //   maxPriorityFeePerGas: "5000000000", // Max priority fee per gas
+    //   maxFeePerGas: "6000000000000", // Max fee per gas
+    // });
+    const contract = new web3.eth.Contract(
+      JSON.parse(JSON.stringify(abi)),
+      CONTRACT_ADDRESS
+    )
+    const result = await contract.methods
+      .deployCompanyAccount(wallet as string)
+      .send({ from: wallet as string })
+    console.log('created account', result)
   }
   return (
     <Form {...form}>
@@ -142,7 +139,7 @@ export default function CompanyForm() {
             </FormItem>
           )}
         />
-       
+
         <Button
           type='submit'
           className='w-full'
