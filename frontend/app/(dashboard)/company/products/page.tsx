@@ -172,7 +172,7 @@ export default function Page() {
                     <SheetTrigger asChild>
                         <Button variant="default">Add Product</Button>
                     </SheetTrigger>
-                    <SheetContent className="w-[400px] sm:w-[540px]">
+                    <SheetContent className="w-[400px] sm:w-[540px] overflow-y-auto">
                         <SheetHeader>
                             <SheetTitle>New product</SheetTitle>
                             <SheetDescription>
@@ -303,7 +303,7 @@ export default function Page() {
                                                 <FormLabel htmlFor="imageUrl">Image</FormLabel>
                                                 <FormControl>
                                                     <div className='mt-12 w-full max-w-lg'>
-                                                        <Uploader onChange={(e) => field.onChange(e.target.files[0])} />
+                                                        <Uploader file={field.value} onChange={field.onChange} />
                                                     </div>
                                                 </FormControl>
                                                 </FormItem>
