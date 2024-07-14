@@ -1,5 +1,8 @@
+"use client"
 import { DataTable } from '@/components/pages/company/data-table'
+import { payamentsData } from '@/lib/data/mochup'
 import { ColumnDef } from '@tanstack/react-table'
+import { useState } from 'react'
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -26,38 +29,35 @@ const columns: ColumnDef<Payment>[] = [
     header: 'Status',
   },
   {
-    accessorKey: 'amount',
-    header: 'Amount',
+    accessorKey: 'import',
+    header: 'Import',
+    cell: ({ row }) => {
+      return <div>{row.original.amount} USDC</div>
+    }
   },
   {
     accessorKey: 'type',
     header: 'Type',
+    cell: ({ row }) => {
+      if (row.original.type === 'recurring') {
+        return <div>Recurring</div>
+      }
+      return <div>One time</div>
+    }
   },
 ]
 
-// async function getData(): Promise<Payment[]> {
-//     // Fetch data from your API here.
-//     return [
-//         {
-//             id: "728ed52f",
-//             name: "test",
-//             amount: 100,
-//             product: "test",
-//             type: "oneTime",
-//             status:"pending"
-//         },
-//         // ...
-//     ]
-// }
+
 
 export default async function Page() {
-  // const data = await getData()
+  const [payments, setPayments] = useState<Payment[]>(payamentsData)
+
 
   return (
     <>
       <h1 className='text-2xl font-bold'>My payments</h1>
       <div className='mt-2 w-full'>
-        <DataTable columns={columns} data={[]} />
+        <DataTable columns={columns} data={payments} />
       </div>
     </>
   )
