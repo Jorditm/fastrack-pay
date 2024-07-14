@@ -11,9 +11,12 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet"
+import { subscriptionsData } from "@/lib/data/mochup";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { ColumnDef } from "@tanstack/react-table"
+import { CheckIcon, XIcon } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -29,51 +32,74 @@ const formSchema = z.object({
     }),
 })
 
-export type Payment = {
+export type Subscription = {
     id: string
-    amount: number
-    status: "pending" | "processing" | "success" | "failed"
     name: string
-    type: string
+    price: number
+    status: "pending" | "success" | "failed"
+    interval: number
+    recurring: boolean
 }
 
-const columns: ColumnDef<Payment>[] = [
-    {
-        accessorKey: "status",
-        header: "Status",
-    },
+const columns: ColumnDef<Subscription>[] = [
     {
         accessorKey: "name",
         header: "Name",
     },
     {
-        accessorKey: "amount",
-        header: "Amount",
+        accessorKey: "price",
+        header: "Price",
+        cell: ({ row }) => {
+            return <div>{row.original.price} USDC</div>
+        }
     },
     {
-        accessorKey: "type",
-        header: "Type",
+        accessorKey: "status",
+        header: "Status",
     },
+    {
+        accessorKey: "interval",
+        header: "Interval",
+        cell: ({ row }) => {
+            return <div>{row.original.interval} days</div>
+          }
+    },
+    {
+        accessorKey: "recurring",
+        header: "Recurring",
+        cell: ({ row }) => {
+            if (row.original.recurring) {
+                return <CheckIcon className="w-4 h-4 stroke-green-500" />
+            }
+            return <XIcon className="w-4 h-4 stroke-red-500" />
+        }
+    }
 ]
 
 
-// async function getData(): Promise<Payment[]> {
-//     // Fetch data from your API here.
-//     return [
-//         {
-//             id: "728ed52f",
-//             amount: 100,
-//             name: "test",
-//             type: "oneTime",
-//             status: "pending"
-//         },
-//         // ...
-//     ]
-// }
+async function getSubscriptions(): Promise<Subscription[]> {
+    return subscriptionsData
+}
 
 
 export default function Page() {
-    // const data = getData()
+    const [subscriptions, setSubscriptions] = useState<Subscription[]>([])
+
+    async function getSubscriptions(): Promise<Subscription[]> {
+        return subscriptionsData
+    }
+
+    useEffect(() => {
+        const fetchSubscriptions = async () => {
+            const subscriptions = await getSubscriptions()
+            setSubscriptions(subscriptions)
+        }
+
+        fetchSubscriptions()
+    }, [])
+
+
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -165,7 +191,7 @@ export default function Page() {
             </div>
             <div className='mt-2 w-full'>
 
-                <DataTable columns={columns} data={[]} />
+                <DataTable columns={columns} data={subscriptions} />
             </div>
 
         </>
