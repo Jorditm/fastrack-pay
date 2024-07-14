@@ -1,0 +1,32 @@
+specVersion: 1.0.0
+indexerHints:
+  prune: auto
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: Factory
+    network: sepolia
+    source:
+      address: "0x264B938d79B863493173C98Aa461a3486FFD3797"
+      abi: Factory
+      startBlock: 6301895
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - CompanyAccountCreated
+        - CustomerAccountCreated
+        - OwnershipTransferred
+      abis:
+        - name: Factory
+          file: ./abis/Factory.json
+      eventHandlers:
+        - event: CompanyAccountCreated(address)
+          handler: handleCompanyAccountCreated
+        - event: CustomerAccountCreated(address)
+          handler: handleCustomerAccountCreated
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+      file: ./src/factory.ts
