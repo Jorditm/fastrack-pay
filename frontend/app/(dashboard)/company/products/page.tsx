@@ -46,6 +46,7 @@ import {
   SignerOrProvider,
 } from '@gelatonetwork/relay-sdk'
 import { toast } from '@/components/ui/use-toast'
+import { useTransactionReceipt } from 'wagmi'
 
 const formSchema = z.object({
   title: z.string().min(2, {
@@ -120,23 +121,20 @@ export default function Page() {
   const [transactionHash, setTransactionHash] = useState<`0x${string}` | null>(
     null
   )
+  const { data, refetch } = useTransactionReceipt({
+    hash: transactionHash as `0x${string}`
+  })
+
+  useEffect(() => {
+    if (!data) {
+      refetch()
+    }
+    if (data) {
+      setIsOpen(false)
+    }
+  }, [data])
+
   const [isOpen, setIsOpen] = useState(false)
-
-  const provider = new Web3(web3auth.provider as any)
-
-  //   async function getAllProducts(): Promise<void> {
-  //     const contract = new provider.eth.Contract(
-  //       JSON.parse(JSON.stringify(abi)),
-  //       CONTRACT_ADDRESS
-  //     )
-  //     const allProducts = await contract.methods.getProducts().call()
-  //     console.log('allProducts -->', allProducts)
-  //     setProducts(allProducts as Product[])
-  //   }
-
-  //   useEffect(() => {
-  //     getAllProducts()
-  //   }, [provider, setProvider])
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -151,7 +149,7 @@ export default function Page() {
   })
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    setLoading(true)    
+    setLoading(true)
     const relay = new GelatoRelay()
     const ipfsCid = await uploadToLighhouse(
       values.imageUrl.name,
@@ -198,8 +196,6 @@ export default function Page() {
           clearInterval(statusInterval)
           if (status.transactionHash) {
             setTransactionHash(status?.transactionHash as `0x${string}`)
-            setIsOpen(false)
-
           }
         }
         if (status?.taskState === 'Cancelled') {
@@ -212,12 +208,6 @@ export default function Page() {
           })
         }
       }
-    //   if (result) {
-    //     //TODO: inside interval successfull
-    //     //TODO: the product is saved, close the popover with one useState in sheet, to controlled component
-    //     //TODO: redirect to /company/products and using wagmi and useQuery, use the method refetch
-    //   }
-
       const statusInterval = setInterval(checkStatus, 5000) // Poll every 5 seconds
     }
   }
@@ -266,15 +256,13 @@ export default function Page() {
     form.setValue('interval', 0)
   }, [form.watch('recurring')])
 
-  console.log(form.formState.errors)
-
   return (
     <>
       <div className='flex items-center justify-between'>
         <h1 className='text-2xl font-bold'>Products</h1>
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger asChild>
-            <Button  variant='default'>Add Product</Button>
+            <Button variant='default'>Add Product</Button>
           </SheetTrigger>
           <SheetContent className='w-[400px] overflow-y-auto sm:w-[540px]'>
             <SheetHeader>
@@ -434,8 +422,8 @@ export default function Page() {
                   />
                 </div>
                 <div className='w-full'>
-                  <Button className='w-full' type='submit'>
-                    Add Product
+                  <Button disabled={loading} className='w-full' type='submit'>
+                    {loading ? "Uploading product.." : "Add Product"}
                   </Button>
                 </div>
               </form>
