@@ -8,6 +8,7 @@ const ALCHEMY_SEPOLIA_URL=process.env.ALCHEMY_SEPOLIA_URL;
 const ETHERSCAN_API_KEY=process.env.ETHERSCAN_API_KEY;
 const ARBITRUM_SEPOLIA_URL=process.env.ARBITRUM_SEPOLIA_URL;
 const POLYGON_ZKEVM_URL=process.env.POLYGON_ZKEVM_URL;
+const BASE_MAINNET_URL=process.env.BASE_MAINNET_URL;
 
 const config: HardhatUserConfig = {
   solidity: {
@@ -34,6 +35,10 @@ const config: HardhatUserConfig = {
     polygonZkEvm: {
       url: POLYGON_ZKEVM_URL!,
       accounts: [WALLET_PRIVATE_KEY!]
+    },
+    base: {
+      url: BASE_MAINNET_URL!,
+      accounts: [WALLET_PRIVATE_KEY!]
     }
   },
   defaultNetwork: "localhost",
@@ -41,7 +46,8 @@ const config: HardhatUserConfig = {
     apiKey: {
       sepolia: ETHERSCAN_API_KEY!,
       arbitrum: ETHERSCAN_API_KEY!,
-      polygonZkEvm: ETHERSCAN_API_KEY!
+      polygonZkEvm: ETHERSCAN_API_KEY!,
+      base: ETHERSCAN_API_KEY!
     },
     customChains: [
       {
@@ -66,6 +72,14 @@ const config: HardhatUserConfig = {
         urls: {
           apiURL: "https://explorer-ui.cardona.zkevm-rpc.com/api",
           browserURL: "https://explorer-ui.cardona.zkevm-rpc.com/"
+        }
+      },
+      {
+        network: "base",
+        chainId: 84532,
+        urls: {
+          apiURL: "https://base-sepolia.blockscout.com/api",
+          browserURL: "https://base-sepolia.blockscout.com/"
         }
       }
     ],
