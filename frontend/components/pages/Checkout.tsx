@@ -101,7 +101,6 @@ export default function Checkout() {
       refetch()
     }
     if (data) {
-      console.log('payment success', data)
       router.push('/payment-success')
     }
   }, [data])
