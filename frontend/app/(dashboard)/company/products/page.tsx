@@ -120,6 +120,7 @@ export default function Page() {
   const [transactionHash, setTransactionHash] = useState<`0x${string}` | null>(
     null
   )
+  const [isOpen, setIsOpen] = useState(false)
 
   const provider = new Web3(web3auth.provider as any)
 
@@ -197,6 +198,8 @@ export default function Page() {
           clearInterval(statusInterval)
           if (status.transactionHash) {
             setTransactionHash(status?.transactionHash as `0x${string}`)
+            setIsOpen(false)
+
           }
         }
         if (status?.taskState === 'Cancelled') {
@@ -209,11 +212,11 @@ export default function Page() {
           })
         }
       }
-      if (result) {
-        //TODO: inside interval successfull
-        //TODO: the product is saved, close the popover with one useState in sheet, to controlled component
-        //TODO: redirect to /company/products and using wagmi and useQuery, use the method refetch
-      }
+    //   if (result) {
+    //     //TODO: inside interval successfull
+    //     //TODO: the product is saved, close the popover with one useState in sheet, to controlled component
+    //     //TODO: redirect to /company/products and using wagmi and useQuery, use the method refetch
+    //   }
 
       const statusInterval = setInterval(checkStatus, 5000) // Poll every 5 seconds
     }
@@ -269,9 +272,9 @@ export default function Page() {
     <>
       <div className='flex items-center justify-between'>
         <h1 className='text-2xl font-bold'>Products</h1>
-        <Sheet>
+        <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger asChild>
-            <Button variant='default'>Add Product</Button>
+            <Button  variant='default'>Add Product</Button>
           </SheetTrigger>
           <SheetContent className='w-[400px] overflow-y-auto sm:w-[540px]'>
             <SheetHeader>

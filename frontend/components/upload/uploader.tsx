@@ -2,7 +2,7 @@
 
 import { AnimatedCheck } from '@/components/animatedCheck'
 import { Button } from '@/components/ui/button'
-import { abi } from '@/lib/wagmi/companyAbi'
+import { abiCompany } from '@/lib/wagmi/companyAbi'
 import { cn } from '@/lib/utils'
 // import { vaultiumContract } from '@/lib/wagmi/vaultiumContract'
 import { motion } from 'framer-motion'
