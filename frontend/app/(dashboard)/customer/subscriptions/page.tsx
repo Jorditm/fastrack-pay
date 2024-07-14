@@ -62,7 +62,7 @@ const columns: ColumnDef<Subscription>[] = [
         header: "Interval",
         cell: ({ row }) => {
             return <div>{row.original.interval} days</div>
-          }
+        }
     },
     {
         accessorKey: "recurring",
@@ -77,27 +77,10 @@ const columns: ColumnDef<Subscription>[] = [
 ]
 
 
-async function getSubscriptions(): Promise<Subscription[]> {
-    return subscriptionsData
-}
 
 
 export default function Page() {
-    const [subscriptions, setSubscriptions] = useState<Subscription[]>([])
-
-    async function getSubscriptions(): Promise<Subscription[]> {
-        return subscriptionsData
-    }
-
-    useEffect(() => {
-        const fetchSubscriptions = async () => {
-            const subscriptions = await getSubscriptions()
-            setSubscriptions(subscriptions)
-        }
-
-        fetchSubscriptions()
-    }, [])
-
+    const [subscriptions, setSubscriptions] = useState<Subscription[]>(subscriptionsData)
 
 
     const form = useForm<z.infer<typeof formSchema>>({

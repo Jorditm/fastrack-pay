@@ -137,7 +137,7 @@ const columns: ColumnDef<Product>[] = [
 
 
 export default function Page() {
-    const [products, setProducts] = useState<Product[]>([])
+    const [products, setProducts] = useState<Product[]>(productsData)
     const { user, wallet } = useSession()
     const { setProvider, setLoggedIn } = useWeb3AuthCustomProvider()
     const [loading, setLoading] = useState(false)
@@ -147,20 +147,6 @@ export default function Page() {
     const { data, refetch } = useTransactionReceipt({
         hash: transactionHash as `0x${string}`
     })
-
-    async function getProducts(): Promise<Product[]> {
-        return productsData
-    }
-
-    useEffect(() => {
-        const fetchProducts = async () => {
-            const products = await getProducts()
-            setProducts(products)
-        }
-
-        fetchProducts()
-    }, [])
-
 
     useEffect(() => {
         if (!data) {
