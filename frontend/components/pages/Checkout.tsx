@@ -1,5 +1,10 @@
 'use client'
-import { redirect, useParams, useRouter, useSearchParams } from 'next/navigation'
+import {
+  redirect,
+  useParams,
+  useRouter,
+  useSearchParams,
+} from 'next/navigation'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
@@ -17,10 +22,67 @@ import {
 import { useEffect, useState } from 'react'
 import { toast } from '../ui/use-toast'
 import { useTransactionReceipt } from 'wagmi'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
+import ProductImage from '@/public/product.jpg'
+
+const formSchema = z.object({
+  title: z
+    .string()
+    .min(2, {
+      message: 'Title must be at least 2 characters.',
+    })
+    .nullable()
+    .optional(),
+  price: z
+    .number()
+    .min(1, {
+      message: 'Price must be at least 1.',
+    })
+    .nullable()
+    .optional(),
+  description: z
+    .string()
+    .min(2, {
+      message: 'Description must be at least 2 characters.',
+    })
+    .nullable()
+    .optional(),
+  recurring: z
+    .string()
+    .min(2, {
+      message: 'Recurring must be at least 2 characters.',
+    })
+    .nullable()
+    .optional(),
+  available: z
+    .string()
+    .min(2, {
+      message: 'Available must be at least 2 characters.',
+    })
+    .nullable()
+    .optional(),
+  interval: z
+    .number()
+    .min(0, {
+      message: 'Interval must be at least 0.',
+    })
+    .nullable()
+    .optional(),
+  imageUrl: z
+    .instanceof(File, {
+      message: "Image can't be empty.",
+    })
+    .nullable()
+    .optional(),
+})
 
 export default function Checkout() {
   const [loading, setLoading] = useState(false)
-  const [transactionHash, setTransactionHash] = useState<string | null>(null)
+  const [transactionHash, setTransactionHash] = useState<`0x${string}` | null>(
+    null
+  )
 
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -39,9 +101,7 @@ export default function Checkout() {
       refetch()
     }
     if (data) {
-      const companyAddress = '0x' + data.logs[1].data.slice(-40)
-      localStorage.setItem('companyAddress', companyAddress)
-      redirect('/payment-success')
+      router.push('/payment-success')
     }
   }, [data])
 
@@ -51,8 +111,25 @@ export default function Checkout() {
     return Math.round(days)
   }
 
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      title: '',
+      price: 0,
+      description: '',
+      recurring: 'false',
+      available: 'false',
+      interval: 0,
+    },
+  })
+
   const onSubmit = async () => {
-    //TODO: ADD FAKE DATA TO DIRECTLY ADD SUBSCRIPTION METHOD TO CUSTOMER CONTRACT
+    setLoading(true)
+    //MOCKED RESPONSE
+    setTimeout(() => {
+      setLoading(false)
+      router.push("/payment-success")
+    }, 1500)
     const relay = new GelatoRelay()
     const ethersProvider = new ethers.BrowserProvider(
       web3auth.provider as Eip1193Provider
@@ -63,8 +140,9 @@ export default function Checkout() {
 
     const { data: txData } = await contract.addSubscription.populateTransaction(
       {
-        name: 'banana',
-        logoUrl: 'https://www.google.com',
+        companyContract: '0xdd393daa360299023a754f1fe112a3f8a1edbd55',
+        productId:
+          '0x0000000000000000000000009f351ac673dee941a36e7d15899e311f2b4583a8',
       }
     )
     const request: CallWithERC2771Request = {
@@ -117,7 +195,7 @@ export default function Checkout() {
           />
           <p className='pt-1.5 text-3xl font-bold text-primary'>Fastrack Pay</p>
         </div>
-        <div className='flex w-full max-w-[1200px] content-center items-center justify-between'>
+        <div className='flex w-full max-w-[1200px] content-center items-center justify-between pb-10'>
           <div className='flex w-1/2 flex-col items-center justify-center gap-6'>
             <div className='flex w-72 flex-col items-start justify-start'>
               <div className='flex flex-col items-start justify-start'>
@@ -125,61 +203,76 @@ export default function Checkout() {
                 <p className='text-2xl'>{price} ETH</p>
               </div>
             </div>
-            <div className='flex h-72 w-72 items-center justify-center rounded-lg border border-primary'>
-              Image product
+            <div className='flex h-80 w-72 items-center justify-center overflow-hidden rounded-lg border border-primary'>
+              <Image
+                src={ProductImage}
+                alt='Login Image'
+                className='object-cover object-center'
+                width={400}
+                height={400}
+                priority={true}
+              />
             </div>
           </div>
-          <div className='flex w-1/2 items-center justify-center'>
-            <div className='flex w-2/3 flex-col items-center justify-center gap-4'>
+          <div className='flex w-2/3 items-center justify-center'>
+            <div className='flex w-3/4 flex-col items-center justify-center gap-4'>
               <div className='grid gap-2 text-center'>
                 <h1 className='text-3xl font-bold'>Checkout</h1>
               </div>
               <div className='flex w-full flex-col gap-6'>
-                <div className='flex w-full flex-col gap-6'>
-                  <div className='flex w-full flex-col gap-4'>
-                    <div className='space-y-2'>
-                      <Label className='text-primary' htmlFor='name'>
-                        Company name
-                      </Label>
-                      <p className='ml-4'>{company}</p>
-                    </div>
-                    <div className='space-y-2'>
-                      <Label className='text-primary' htmlFor='name'>
-                        Product name
-                      </Label>
-                      <p className='ml-4'>{title}</p>
-                    </div>
-                    <div className='space-y-2'>
-                      <Label className='text-primary' htmlFor='name'>
-                        Product description
-                      </Label>
-                      <p className='ml-4'>{description}</p>
-                    </div>
-                    <div className='space-y-2'>
-                      <Label className='text-primary' htmlFor='name'>
-                        Product price
-                      </Label>
-                      <p className='ml-4'>{price}</p>
-                    </div>
+                <div className='flex w-full flex-col gap-4'>
+                  <div className='space-y-1'>
+                    <Label className='text-primary' htmlFor='name'>
+                      Company name
+                    </Label>
+                    <p className='ml-4'>{company}</p>
+                  </div>
+                  <div className='space-y-1'>
+                    <Label className='text-primary' htmlFor='name'>
+                      Product name
+                    </Label>
+                    <p className='ml-4'>{title}</p>
+                  </div>
+                  <div className='space-y-1'>
+                    <Label className='text-primary' htmlFor='name'>
+                      Product description
+                    </Label>
+                    <p className='ml-4'>{description}</p>
+                  </div>
+                  <div className='space-y-1'>
+                    <Label className='text-primary' htmlFor='name'>
+                      Product price
+                    </Label>
+                    <p className='ml-4'>{price}</p>
+                  </div>
 
-                    <div className='space-y-2'>
-                      <Label className='text-primary' htmlFor='name'>
-                        Product recurring
-                      </Label>
-                      <p className='ml-4'>{recurring}</p>
-                    </div>
-                    <div className='space-y-2'>
+                  <div className='space-y-1'>
+                    <Label className='text-primary' htmlFor='name'>
+                      Product type
+                    </Label>
+                    <p className='ml-4'>
+                      {recurring === 'false'
+                        ? 'One time payment'
+                        : 'Subscription'}
+                    </p>
+                  </div>
+                  {recurring === 'true' && (
+                    <div className='space-y-1'>
                       <Label className='text-primary' htmlFor='name'>
                         Product interval
                       </Label>
                       <p className='ml-4'>{interval} days</p>
                     </div>
-                  </div>
-                  <div className='w-full'>
-                    <Button className='w-full' type='button'>
-                      Pay
-                    </Button>
-                  </div>
+                  )}
+                </div>
+                <div className='w-full'>
+                  <Button
+                    disabled={loading}
+                    className='w-full'
+                    onClick={onSubmit}
+                  >
+                    {loading ? 'Confirming payment...' : 'Pay'}
+                  </Button>
                 </div>
               </div>
             </div>

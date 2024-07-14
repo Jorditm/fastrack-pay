@@ -21,7 +21,7 @@ export default function Page() {
         <Button
           onClick={() =>
             router.push(
-              '/checkout?price=1&companyName=FastrackPay&title=DemoProduct&description=DemoDescription&recurring=false&interval=1296000'
+              '/checkout?price=1&companyName=BagCompany&title=FavoriteBag&description=SuperBag&recurring=false'
             )
           }
           size='lg'
