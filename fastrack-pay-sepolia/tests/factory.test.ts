@@ -5,7 +5,7 @@ import {
   clearStore,
   beforeAll,
   afterAll
-} from "matchstick-as/assembly/index"
+} from "matchstick-as"
 import { Address } from "@graphprotocol/graph-ts"
 import { CompanyAccountCreated } from "../generated/schema"
 import { CompanyAccountCreated as CompanyAccountCreatedEvent } from "../generated/Factory/Factory"
