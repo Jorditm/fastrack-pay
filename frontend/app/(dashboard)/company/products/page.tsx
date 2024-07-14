@@ -76,7 +76,7 @@ const formSchema = z.object({
   }),
 })
 
-export type Product = {
+type Product = {
   id: string
   title: string
   price: number
@@ -86,7 +86,7 @@ export type Product = {
   interval: number
 }
 
-export const columns: ColumnDef<Product>[] = [
+const columns: ColumnDef<Product>[] = [
   {
     accessorKey: 'title',
     header: 'Title',

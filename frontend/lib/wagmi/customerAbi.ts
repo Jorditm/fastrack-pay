@@ -2,7 +2,8 @@ interface AbiInput {
   internalType: string
   name: string
   type: string
-  indexed?: boolean // Add this line
+  indexed?: boolean
+  components?: AbiInput[] // Add this line
 }
 
 interface AbiItem {
